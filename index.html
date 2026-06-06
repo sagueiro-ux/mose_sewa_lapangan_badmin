@@ -174,7 +174,397 @@
 
     <!-- ═══════════ SECTIONS (dimuat via JS) ═══════════ -->
     <div id="sections-container">
-        <!-- Sections diinjeksi oleh loadSections() -->
+        <!-- ═══════════ HOME ═══════════ -->
+<section id="home" class="section active">
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-left">
+                <div class="hero-badge">🏸 Platform Sewa Lapangan #1 di Surabaya</div>
+                <h1 class="hero-title">SEWA<br>LAPANGAN<br><span>SEMUDAH ITU.</span></h1>
+                <p class="hero-desc">MoSe hadir untuk memudahkan kamu menemukan dan memesan lapangan badminton
+                    berkualitas. Cek ketersediaan, pilih waktu, dan booking dalam hitungan menit.</p>
+                <div class="hero-actions">
+                    <button class="btn-primary" onclick="showSection('booking')">⚡ Booking Sekarang</button>
+                    <button class="btn-outline" onclick="showSection('schedule')">📋 Lihat Jadwal</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-num">4</div>
+                        <div class="stat-label">Lapangan</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">06–22</div>
+                        <div class="stat-label">Jam Buka</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num" id="home-booking-count">1200+</div>
+                        <div class="stat-label">Booking</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">4.9★</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-right" id="hero-court-preview">
+                <div class="court-card" style="opacity:0.5">
+                    <div style="color:rgba(255,255,255,0.5);text-align:center;padding:1rem;">Memuat data lapangan...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-section">
+        <div class="container">
+            <div class="section-label">TENTANG KAMI</div>
+            <h2 class="section-title">MENGAPA MEMILIH MOSE?</h2>
+            <p class="section-desc">MoSe (Mobile Sewa) adalah platform digital yang menghubungkan para pecinta badminton
+                dengan fasilitas lapangan terbaik. Kami percaya bahwa olahraga seharusnya mudah diakses oleh semua
+                orang.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Booking Instan</div>
+                    <div class="feature-desc">Pesan lapangan dalam hitungan menit. Tidak perlu antri, tidak perlu
+                        telepon — semua serba digital.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <div class="feature-title">Jadwal Real-Time</div>
+                    <div class="feature-desc">Lihat ketersediaan lapangan secara langsung. Data selalu diperbarui agar
+                        kamu tidak perlu khawatir konflik jadwal.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏟️</div>
+                    <div class="feature-title">Fasilitas Premium</div>
+                    <div class="feature-desc">4 lapangan dengan lantai kayu premium, pencahayaan LED, dan AC — siap
+                        untuk latihan serius maupun santai.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <div class="feature-title">Pembayaran Mudah</div>
+                    <div class="feature-desc">Transfer bank, e-wallet, atau bayar di tempat. Pilih metode yang paling
+                        nyaman untukmu.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>Dibuat oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
+</section>
+        <!-- ═══════════ JADWAL ═══════════ -->
+<section id="schedule" class="section">
+    <div class="schedule-wrap">
+        <div class="container">
+            <div class="schedule-header">
+                <div>
+                    <h1>JADWAL LAPANGAN</h1>
+                    <p style="color:rgba(255,255,255,0.55);font-size:14px;margin-top:4px;">Klik slot tersedia untuk
+                        langsung booking</p>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+                    <input type="date" id="schedule-date-picker" class="form-input"
+                        style="width:180px;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);color:white;padding:8px 12px;font-size:13px;">
+                    <div class="date-selector" id="date-selector-btns"></div>
+                </div>
+            </div>
+
+            <div class="schedule-grid-wrapper">
+                <div class="schedule-grid">
+                    <div class="grid-header">Waktu</div>
+                    <div class="grid-header">🏸 Lapangan A</div>
+                    <div class="grid-header">🏸 Lapangan B</div>
+                    <div class="grid-header">🏸 Lapangan C</div>
+                    <div class="grid-header">🏸 Lapangan D</div>
+                </div>
+                <div id="schedule-body">
+                    <div class="schedule-loading">⏳ Memuat jadwal...</div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot"
+                        style="background:rgba(19,201,142,0.3);border:1.5px solid rgba(19,201,142,0.6);"></div>Tersedia
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot"
+                        style="background:rgba(26,95,168,0.15);border:1.5px dashed rgba(26,95,168,0.4);"></div>Sudah
+                    Dipesan
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot"
+                        style="background:rgba(255,165,0,0.2);border:1.5px solid rgba(255,165,0,0.5);"></div>Booking
+                    Saya
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>Dibuat oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
+</section>
+        <!-- ═══════════ COURTS ═══════════ -->
+ 
+<section id="courts" class="section">
+    <div class="courts-wrap">
+        <div class="container">
+            <div class="section-label">FASILITAS KAMI</div>
+            <h2 class="section-title">PILIH LAPANGANMU</h2>
+            <p class="section-desc">Empat lapangan berkualitas siap melayanimu, mulai dari latihan ringan hingga
+                turnamen internal.</p>
+            <div class="courts-grid" id="courts-grid">
+                <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">⏳ Memuat data
+                    lapangan...</div>
+            </div>
+        </div>
+    </div>
+    <footer>Dibuat dengan ❤️ oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
+</section>
+        <!-- ═══════════ BOOKING ═══════════ -->
+ 
+<section id="booking" class="section">
+    <div class="booking-wrap">
+        <div class="container">
+
+            <!-- Auth Gate -->
+            <div class="auth-gate" id="booking-auth-gate">
+                <div class="auth-gate-icon">🔒</div>
+                <div class="auth-gate-title">LOGIN DIPERLUKAN</div>
+                <div class="auth-gate-desc">Kamu perlu masuk ke akun MoSe terlebih dahulu untuk melakukan booking
+                    lapangan.</div>
+                <button class="auth-gate-btn" onclick="openAuthOverlay()">🔑 Masuk / Daftar</button>
+            </div>
+
+            <!-- Booking Form -->
+            <div id="booking-content" style="display:none">
+                <div class="section-label">RESERVASI</div>
+                <h2 class="section-title">BOOKING LAPANGAN</h2>
+                <div class="booking-layout">
+
+                    <div class="booking-form-card">
+
+                        <!-- Step 1: Data Diri -->
+                        <div class="form-step">
+                            <div class="step-num">1</div>
+                            <div class="step-label">Data Diri</div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input class="form-input" id="book-name" type="text" placeholder="Budi Santoso">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Nomor WhatsApp</label>
+                                <input class="form-input" id="book-phone" type="tel" placeholder="08123456789">
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Lapangan & Tanggal -->
+                        <div
+                            style="margin-top:.5rem;padding-top:1.5rem;border-top:1.5px solid var(--gray);margin-bottom:1.5rem;">
+                            <div class="form-step" style="border:none;padding:0;margin-bottom:1.5rem;">
+                                <div class="step-num">2</div>
+                                <div class="step-label">Pilih Lapangan &amp; Tanggal</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Lapangan</label>
+                                    <select class="form-select" id="book-court" onchange="onCourtOrDateChange()">
+                                        <option value="">— Pilih Lapangan —</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tanggal</label>
+                                    <input class="form-input" id="book-date" type="date"
+                                        oninput="onCourtOrDateChange()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Pilih Jam -->
+                        <div style="padding-top:1.5rem;border-top:1.5px solid var(--gray);margin-bottom:1.5rem;">
+                            <div class="form-step" style="border:none;padding:0;margin-bottom:1.5rem;">
+                                <div class="step-num">3</div>
+                                <div class="step-label">Pilih Jam (klik untuk memilih)</div>
+                            </div>
+                            <div class="time-slot-picker" id="time-slots">
+                                <div
+                                    style="grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--text-light);font-size:14px;">
+                                    Pilih lapangan dan tanggal terlebih dahulu</div>
+                            </div>
+                            <p style="font-size:12px;color:var(--text-light);margin-top:8px;">* Slot abu-abu sudah
+                                dipesan untuk tanggal ini</p>
+                        </div>
+
+                        <!-- Step 4: Pembayaran -->
+                        <div style="padding-top:1.5rem;border-top:1.5px solid var(--gray);margin-bottom:1.5rem;">
+                            <div class="form-step" style="border:none;padding:0;margin-bottom:1.5rem;">
+                                <div class="step-num">4</div>
+                                <div class="step-label">Metode Pembayaran</div>
+                            </div>
+                            <div
+                                style="background:linear-gradient(135deg,rgba(15,158,110,0.12),rgba(26,95,168,0.08));border:1.5px solid rgba(19,201,142,0.35);border-radius:14px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;">
+                                <div
+                                    style="width:48px;height:48px;background:linear-gradient(135deg,var(--teal),var(--blue-light));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">
+                                    ⬛</div>
+                                <div>
+                                    <div style="font-weight:700;font-size:15px;color:var(--navy);margin-bottom:3px;">
+                                        QRIS</div>
+                                    <div style="font-size:13px;color:var(--text-mid);">Scan QR Code · GoPay · OVO · Dana
+                                        · ShopeePay · dan semua e-wallet</div>
+                                </div>
+                                <div
+                                    style="margin-left:auto;background:rgba(19,201,142,0.15);border:1px solid rgba(19,201,142,0.4);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:700;color:var(--teal);">
+                                    CASHLESS ONLY</div>
+                            </div>
+                            <div class="form-group" style="margin-top:1rem;margin-bottom:0;">
+                                <label class="form-label">Catatan Khusus</label>
+                                <input class="form-input" id="book-note" type="text" placeholder="Opsional...">
+                            </div>
+                        </div>
+
+                        <button class="submit-btn" id="submit-btn" onclick="submitBooking()">⚡ KONFIRMASI
+                            BOOKING</button>
+                    </div>
+
+                    <!-- Summary Sidebar -->
+                    <div class="booking-summary">
+                        <div class="summary-title">RINGKASAN BOOKING</div>
+                        <div class="summary-row">
+                            <div class="summary-key">Nama</div>
+                            <div class="summary-val" id="sum-name">—</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-key">Lapangan</div>
+                            <div class="summary-val" id="sum-court">—</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-key">Tanggal</div>
+                            <div class="summary-val" id="sum-date">—</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-key">Jam</div>
+                            <div class="summary-val" id="sum-time">—</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-key">Durasi</div>
+                            <div class="summary-val" id="sum-dur">—</div>
+                        </div>
+                        <div class="summary-row">
+                            <div class="summary-key">Pembayaran</div>
+                            <div class="summary-val" id="sum-pay">QRIS</div>
+                        </div>
+                        <div class="summary-row summary-total">
+                            <div class="summary-key">Total</div>
+                            <div class="summary-val" id="sum-total">Rp 0</div>
+                        </div>
+
+                        <!-- Riwayat Booking User -->
+                        <div class="my-bookings-section" id="my-bookings-section">
+                            <div class="recent-title">BOOKING SAYA</div>
+                            <div id="my-bookings-list">
+                                <div style="font-size:12px;color:rgba(255,255,255,0.3);text-align:center;padding:1rem;">
+                                    Memuat riwayat...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer>Dibuat dengan ❤️ oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
+</section>
+        <!-- ═══════════ PROFILE ═══════════ -->
+<section id="profile" class="section">
+    <div class="profile-wrap">
+        <div class="profile-container">
+            <div class="profile-header-label">AKUN SAYA</div>
+            <div class="profile-page-title">EDIT PROFIL</div>
+
+            <!-- Avatar Card -->
+            <div class="profile-avatar-card">
+                <div class="profile-avatar-wrap">
+                    <div class="profile-avatar-img" id="profile-avatar-display"></div>
+                    <button class="avatar-edit-btn" onclick="openAvatarModal()" title="Ganti foto profil">✏️</button>
+                </div>
+                <div class="profile-avatar-info">
+                    <div class="profile-display-name" id="profile-display-name">—</div>
+                    <div class="profile-display-email" id="profile-display-email">—</div>
+                    <div class="profile-avatar-hint">Klik ✏️ untuk mengganti foto profil</div>
+                </div>
+            </div>
+
+            <!-- Data Diri -->
+            <div class="profile-form-card">
+                <div class="profile-card-title">👤 DATA DIRI</div>
+                <div class="profile-alert" id="profile-info-alert"></div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Nama Lengkap</label>
+                    <input class="profile-input" id="profile-nama" type="text" placeholder="Nama lengkap Anda">
+                </div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Nomor WhatsApp</label>
+                    <input class="profile-input profile-input-locked" id="profile-phone" type="tel" disabled>
+                    <div class="profile-lock-note">🔒 Nomor WhatsApp tidak dapat diubah</div>
+                </div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Email</label>
+                    <input class="profile-input profile-input-locked" id="profile-email" type="email" disabled>
+                    <div class="profile-lock-note">🔒 Email tidak dapat diubah</div>
+                </div>
+
+                <button class="profile-save-btn" id="profile-save-btn" onclick="saveProfileInfo()">💾 Simpan
+                    Perubahan</button>
+            </div>
+
+            <!-- Ganti Password -->
+            <div class="profile-form-card">
+                <div class="profile-card-title">🔐 GANTI PASSWORD</div>
+                <div class="profile-alert" id="profile-pw-alert"></div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Password Lama</label>
+                    <div class="profile-input-wrap">
+                        <input class="profile-input" id="profile-old-pw" type="password"
+                            placeholder="Masukkan password saat ini">
+                        <button class="profile-toggle-pw" onclick="toggleProfilePw('profile-old-pw',this)"
+                            tabindex="-1">👁</button>
+                    </div>
+                </div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Password Baru</label>
+                    <div class="profile-input-wrap">
+                        <input class="profile-input" id="profile-new-pw" type="password"
+                            placeholder="Minimal 6 karakter">
+                        <button class="profile-toggle-pw" onclick="toggleProfilePw('profile-new-pw',this)"
+                            tabindex="-1">👁</button>
+                    </div>
+                </div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Konfirmasi Password Baru</label>
+                    <div class="profile-input-wrap">
+                        <input class="profile-input" id="profile-new-pw2" type="password"
+                            placeholder="Ulangi password baru">
+                        <button class="profile-toggle-pw" onclick="toggleProfilePw('profile-new-pw2',this)"
+                            tabindex="-1">👁</button>
+                    </div>
+                </div>
+
+                <button class="profile-save-btn" id="profile-pw-btn" onclick="saveProfilePassword()">🔑 Ganti
+                    Password</button>
+            </div>
+
+        </div>
+    </div>
+    <footer>Dibuat oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
+</section>
     </div>
 
     <!-- ═══════════ AVATAR UPLOAD MODAL ═══════════ -->
@@ -303,7 +693,7 @@
         <span id="toast-msg">Booking berhasil!</span>
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>
