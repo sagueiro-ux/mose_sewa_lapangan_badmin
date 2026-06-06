@@ -1,0 +1,89 @@
+<!-- ═══════════ PROFILE ═══════════ -->
+<section id="profile" class="section">
+    <div class="profile-wrap">
+        <div class="profile-container">
+            <div class="profile-header-label">AKUN SAYA</div>
+            <div class="profile-page-title">EDIT PROFIL</div>
+
+            <!-- Avatar Card -->
+            <div class="profile-avatar-card">
+                <div class="profile-avatar-wrap">
+                    <div class="profile-avatar-img" id="profile-avatar-display"></div>
+                    <button class="avatar-edit-btn" onclick="openAvatarModal()" title="Ganti foto profil">✏️</button>
+                </div>
+                <div class="profile-avatar-info">
+                    <div class="profile-display-name" id="profile-display-name">—</div>
+                    <div class="profile-display-email" id="profile-display-email">—</div>
+                    <div class="profile-avatar-hint">Klik ✏️ untuk mengganti foto profil</div>
+                </div>
+            </div>
+
+            <!-- Data Diri -->
+            <div class="profile-form-card">
+                <div class="profile-card-title">👤 DATA DIRI</div>
+                <div class="profile-alert" id="profile-info-alert"></div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Nama Lengkap</label>
+                    <input class="profile-input" id="profile-nama" type="text" placeholder="Nama lengkap Anda">
+                </div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Nomor WhatsApp</label>
+                    <input class="profile-input profile-input-locked" id="profile-phone" type="tel" disabled>
+                    <div class="profile-lock-note">🔒 Nomor WhatsApp tidak dapat diubah</div>
+                </div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Email</label>
+                    <input class="profile-input profile-input-locked" id="profile-email" type="email" disabled>
+                    <div class="profile-lock-note">🔒 Email tidak dapat diubah</div>
+                </div>
+
+                <button class="profile-save-btn" id="profile-save-btn" onclick="saveProfileInfo()">💾 Simpan
+                    Perubahan</button>
+            </div>
+
+            <!-- Ganti Password -->
+            <div class="profile-form-card">
+                <div class="profile-card-title">🔐 GANTI PASSWORD</div>
+                <div class="profile-alert" id="profile-pw-alert"></div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Password Lama</label>
+                    <div class="profile-input-wrap">
+                        <input class="profile-input" id="profile-old-pw" type="password"
+                            placeholder="Masukkan password saat ini">
+                        <button class="profile-toggle-pw" onclick="toggleProfilePw('profile-old-pw',this)"
+                            tabindex="-1">👁</button>
+                    </div>
+                </div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Password Baru</label>
+                    <div class="profile-input-wrap">
+                        <input class="profile-input" id="profile-new-pw" type="password"
+                            placeholder="Minimal 6 karakter">
+                        <button class="profile-toggle-pw" onclick="toggleProfilePw('profile-new-pw',this)"
+                            tabindex="-1">👁</button>
+                    </div>
+                </div>
+
+                <div class="profile-form-group">
+                    <label class="profile-label">Konfirmasi Password Baru</label>
+                    <div class="profile-input-wrap">
+                        <input class="profile-input" id="profile-new-pw2" type="password"
+                            placeholder="Ulangi password baru">
+                        <button class="profile-toggle-pw" onclick="toggleProfilePw('profile-new-pw2',this)"
+                            tabindex="-1">👁</button>
+                    </div>
+                </div>
+
+                <button class="profile-save-btn" id="profile-pw-btn" onclick="saveProfilePassword()">🔑 Ganti
+                    Password</button>
+            </div>
+
+        </div>
+    </div>
+    <footer>Dibuat oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
+</section>
