@@ -1,0 +1,14 @@
+Options -Indexes
+RewriteEngine On
+RewriteCond %{HTTP:Authorization} .
+RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Pastikan mod_rewrite aktif dan AllowOverride All
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
+
+Options -Indexes
+RewriteEngine On
+RewriteCond %{HTTP:Authorization} .
+RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
