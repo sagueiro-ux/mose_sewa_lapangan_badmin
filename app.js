@@ -5,21 +5,9 @@ const BASE_URL = "http://localhost/mose/api"; // Ganti sesuai server XAMPP Anda
 
 // ─── Section Loader ──────────────────────────────────────────
 // Memuat file HTML tiap section lalu inject ke dalam #sections-container
-async function loadSections() {
-    const container = document.getElementById("sections-container");
-    const sections = ["home", "schedule", "courts", "booking", "profile"];
-
-    for (const name of sections) {
-        try {
-            const res = await fetch(name + ".html");
-            const html = await res.text();
-            container.insertAdjacentHTML("beforeend", html);
-        } catch (e) {
-            console.error("Gagal memuat section:", name, e);
-        }
-    }
-
-    // Setelah semua section dimuat, jalankan inisialisasi
+// Sections sudah di-embed langsung di index.html (tidak perlu fetch)
+function loadSections() {
+    // Semua section sudah ada di DOM, langsung inisialisasi
     bindDynamicEvents();
     init();
 }
