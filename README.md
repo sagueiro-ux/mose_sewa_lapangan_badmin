@@ -184,9 +184,3 @@ Status: `pending` / `verified` / `failed`
 | reza@email.com | password123 |
 
 ---
-
-## 💡 Tips
-
-- Gunakan **Postman** atau **Thunder Client** (VS Code) untuk test API
-- Untuk production, ganti `JWT_SECRET` di `config/database.php` dengan string acak yang kuat
-- Tambahkan validasi role admin jika perlu memisahkan hak akses
