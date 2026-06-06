@@ -1,1561 +1,309 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MoSe — Sewa Lapangan Badminton</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="Mose.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MoSe — Sewa Lapangan Badminton</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="Mose.css" />
 </head>
+
 <body>
-
-<!-- ═══════════ AUTH OVERLAY ═══════════ -->
-<div class="auth-overlay" id="auth-overlay">
-  <div class="auth-card">
-    <div class="auth-logo">
-      <div class="auth-logo-icon">
-        🏸
-      </div>
-      <div class="auth-logo-text">Mo<span>Se</span></div>
-    </div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Masuk</button>
-      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Daftar</button>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="auth-panel active" id="panel-login">
-      <div class="auth-title">SELAMAT DATANG</div>
-      <div class="auth-subtitle">Masuk ke akun MoSe Anda</div>
-      <div class="auth-alert" id="login-alert"></div>
-      <div class="auth-form-group">
-        <label class="auth-label">Email</label>
-        <input class="auth-input" id="login-email" type="email" placeholder="contoh@email.com" autocomplete="email">
-        <div class="auth-error" id="login-email-err">Format email tidak valid</div>
-      </div>
-      <div class="auth-form-group">
-        <label class="auth-label">Password</label>
-        <div class="auth-input-wrap">
-          <input class="auth-input" id="login-pw" type="password" placeholder="Masukkan password" autocomplete="current-password">
-          <button class="toggle-pw" onclick="togglePw('login-pw',this)" tabindex="-1">👁</button>
-        </div>
-        <div class="auth-error" id="login-pw-err">Password tidak boleh kosong</div>
-      </div>
-      <button class="auth-btn" id="login-btn" onclick="doLogin()">🔑 Masuk</button>
-      <div class="auth-divider">Belum punya akun? <span onclick="switchAuthTab('register')">Daftar sekarang</span></div>
-    </div>
-
-    <!-- REGISTER -->
-    <div class="auth-panel" id="panel-register">
-      <div class="auth-title">BUAT AKUN</div>
-      <div class="auth-subtitle">Daftar dan mulai booking lapangan</div>
-      <div class="auth-alert" id="reg-alert"></div>
-      <div class="auth-form-group">
-        <label class="auth-label">Nama Lengkap</label>
-        <input class="auth-input" id="reg-name" type="text" placeholder="Nama lengkap Anda" autocomplete="name">
-        <div class="auth-error" id="reg-name-err">Nama minimal 2 karakter</div>
-      </div>
-      <div class="auth-form-group">
-        <label class="auth-label">Email</label>
-        <input class="auth-input" id="reg-email" type="email" placeholder="contoh@email.com" autocomplete="email">
-        <div class="auth-error" id="reg-email-err">Format email tidak valid</div>
-      </div>
-      <div class="auth-form-group">
-        <label class="auth-label">Nomor WhatsApp</label>
-        <input class="auth-input" id="reg-phone" type="tel" placeholder="08123456789" autocomplete="tel">
-        <div class="auth-error" id="reg-phone-err">Nomor WA minimal 10 digit</div>
-      </div>
-      <div class="auth-form-group">
-        <label class="auth-label">Password</label>
-        <div class="auth-input-wrap">
-          <input class="auth-input" id="reg-pw" type="password" placeholder="Minimal 6 karakter" autocomplete="new-password">
-          <button class="toggle-pw" onclick="togglePw('reg-pw',this)" tabindex="-1">👁</button>
-        </div>
-        <div class="auth-error" id="reg-pw-err">Password minimal 6 karakter</div>
-      </div>
-      <div class="auth-form-group">
-        <label class="auth-label">Konfirmasi Password</label>
-        <div class="auth-input-wrap">
-          <input class="auth-input" id="reg-pw2" type="password" placeholder="Ulangi password" autocomplete="new-password">
-          <button class="toggle-pw" onclick="togglePw('reg-pw2',this)" tabindex="-1">👁</button>
-        </div>
-        <div class="auth-error" id="reg-pw2-err">Password tidak cocok</div>
-      </div>
-      <button class="auth-btn" id="reg-btn" onclick="doRegister()">✨ Buat Akun</button>
-      <div class="auth-divider">Sudah punya akun? <span onclick="switchAuthTab('login')">Masuk di sini</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ NAVBAR ═══════════ -->
-<nav>
-  <div class="nav-brand">
-    <div class="nav-logo-icon">
-      <img src="logo.png" alt="Logo Perusahaan" style="border-radius: 50%" width="150" height="50" object-fit: cover;>
-    </div>
-    <div class="nav-brand-text">Mo<span>Se</span></div>
-  </div>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="#" onclick="showSection('home');closeMenu()" id="nav-home" class="active">Home</a></li>
-    <li><a href="#" onclick="showSection('schedule');closeMenu()" id="nav-schedule">Jadwal</a></li>
-    <li><a href="#" onclick="showSection('courts');closeMenu()" id="nav-courts">Court</a></li>
-    <li><a href="#" onclick="showSection('booking');closeMenu()" id="nav-booking" class="nav-cta">Booking</a></li>
-    <li><a href="#" onclick="showSection('profile');closeMenu()" id="nav-profile" style="display:none">👤 Profil</a></li>
-  </ul>
-  <div id="nav-user-area"></div>
-  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- ═══════════ HOME ═══════════ -->
-<section id="home" class="section active">
-  <div class="hero">
-    <div class="hero-content">
-      <div class="hero-left">
-        <div class="hero-badge">🏸 Platform Sewa Lapangan #1 di Surabaya</div>
-        <h1 class="hero-title">SEWA<br>LAPANGAN<br><span>SEMUDAH ITU.</span></h1>
-        <p class="hero-desc">MoSe hadir untuk memudahkan kamu menemukan dan memesan lapangan badminton berkualitas. Cek ketersediaan, pilih waktu, dan booking dalam hitungan menit.</p>
-        <div class="hero-actions">
-          <button class="btn-primary" onclick="showSection('booking')">⚡ Booking Sekarang</button>
-          <button class="btn-outline" onclick="showSection('schedule')">📋 Lihat Jadwal</button>
-        </div>
-        <div class="hero-stats">
-          <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Lapangan</div></div>
-          <div class="stat-item"><div class="stat-num">06–22</div><div class="stat-label">Jam Buka</div></div>
-          <div class="stat-item"><div class="stat-num" id="home-booking-count">1200+</div><div class="stat-label">Booking</div></div>
-          <div class="stat-item"><div class="stat-num">4.9★</div><div class="stat-label">Rating</div></div>
-        </div>
-      </div>
-      <div class="hero-right" id="hero-court-preview">
-        <!-- Diisi oleh JS dari API courts -->
-        <div class="court-card" style="opacity:0.5"><div style="color:rgba(255,255,255,0.5);text-align:center;padding:1rem;">Memuat data lapangan...</div></div>
-      </div>
-    </div>
-  </div>
-  <div class="about-section">
-    <div class="container">
-      <div class="section-label">TENTANG KAMI</div>
-      <h2 class="section-title">MENGAPA MEMILIH MOSE?</h2>
-      <p class="section-desc">MoSe (Mobile Sewa) adalah platform digital yang menghubungkan para pecinta badminton dengan fasilitas lapangan terbaik. Kami percaya bahwa olahraga seharusnya mudah diakses oleh semua orang.</p>
-      <div class="features-grid">
-        <div class="feature-card"><div class="feature-icon">⚡</div><div class="feature-title">Booking Instan</div><div class="feature-desc">Pesan lapangan dalam hitungan menit. Tidak perlu antri, tidak perlu telepon — semua serba digital.</div></div>
-        <div class="feature-card"><div class="feature-icon">📅</div><div class="feature-title">Jadwal Real-Time</div><div class="feature-desc">Lihat ketersediaan lapangan secara langsung. Data selalu diperbarui agar kamu tidak perlu khawatir konflik jadwal.</div></div>
-        <div class="feature-card"><div class="feature-icon">🏟️</div><div class="feature-title">Fasilitas Premium</div><div class="feature-desc">4 lapangan dengan lantai kayu premium, pencahayaan LED, dan AC — siap untuk latihan serius maupun santai.</div></div>
-        <div class="feature-card"><div class="feature-icon">💳</div><div class="feature-title">Pembayaran Mudah</div><div class="feature-desc">Transfer bank, e-wallet, atau bayar di tempat. Pilih metode yang paling nyaman untukmu.</div></div>
-      </div>
-    </div>
-  </div>
-  <footer>Dibuat oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
-</section>
-
-<!-- ═══════════ JADWAL ═══════════ -->
-<section id="schedule" class="section">
-  <div class="schedule-wrap">
-    <div class="container">
-      <div class="schedule-header">
-        <div>
-          <h1>JADWAL LAPANGAN</h1>
-          <p style="color:rgba(255,255,255,0.55);font-size:14px;margin-top:4px;">Klik slot tersedia untuk langsung booking</p>
-        </div>
-        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
-          <input type="date" id="schedule-date-picker" class="form-input" style="width:180px;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);color:white;padding:8px 12px;font-size:13px;">
-          <div class="date-selector" id="date-selector-btns"></div>
-        </div>
-      </div>
-      <div class="schedule-grid-wrapper">
-      <div class="schedule-grid">
-        <div class="grid-header">Waktu</div>
-        <div class="grid-header">🏸 Lapangan A</div>
-        <div class="grid-header">🏸 Lapangan B</div>
-        <div class="grid-header">🏸 Lapangan C</div>
-        <div class="grid-header">🏸 Lapangan D</div>
-      </div>
-      <div id="schedule-body"><div class="schedule-loading">⏳ Memuat jadwal...</div></div>
-      </div>
-      <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(19,201,142,0.3);border:1.5px solid rgba(19,201,142,0.6);"></div>Tersedia</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(26,95,168,0.15);border:1.5px dashed rgba(26,95,168,0.4);"></div>Sudah Dipesan</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(255,165,0,0.2);border:1.5px solid rgba(255,165,0,0.5);"></div>Booking Saya</div>
-      </div>
-    </div>
-  </div>
-  <footer>Dibuat oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
-</section>
-
-<!-- ═══════════ COURTS ═══════════ -->
-<section id="courts" class="section">
-  <div class="courts-wrap">
-    <div class="container">
-      <div class="section-label">FASILITAS KAMI</div>
-      <h2 class="section-title">PILIH LAPANGANMU</h2>
-      <p class="section-desc">Empat lapangan berkualitas siap melayanimu, mulai dari latihan ringan hingga turnamen internal.</p>
-      <div class="courts-grid" id="courts-grid">
-        <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">⏳ Memuat data lapangan...</div>
-      </div>
-    </div>
-  </div>
-  <footer>Dibuat dengan ❤️ oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
-</section>
-
-<!-- ═══════════ BOOKING ═══════════ -->
-<section id="booking" class="section">
-  <div class="booking-wrap">
-    <div class="container">
-      <!-- Auth Gate -->
-      <div class="auth-gate" id="booking-auth-gate">
-        <div class="auth-gate-icon">🔒</div>
-        <div class="auth-gate-title">LOGIN DIPERLUKAN</div>
-        <div class="auth-gate-desc">Kamu perlu masuk ke akun MoSe terlebih dahulu untuk melakukan booking lapangan.</div>
-        <button class="auth-gate-btn" onclick="openAuthOverlay()">🔑 Masuk / Daftar</button>
-      </div>
-
-      <!-- Booking Form -->
-      <div id="booking-content" style="display:none">
-        <div class="section-label">RESERVASI</div>
-        <h2 class="section-title">BOOKING LAPANGAN</h2>
-        <div class="booking-layout">
-          <div class="booking-form-card">
-
-            <div class="form-step">
-              <div class="step-num">1</div>
-              <div class="step-label">Data Diri</div>
+    <!-- ═══════════ AUTH OVERLAY ═══════════ -->
+    <div class="auth-overlay" id="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <div class="auth-logo-icon"></div>
+                <div class="auth-logo-text">Mo<span>Se</span></div>
             </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Nama Lengkap</label>
-                <input class="form-input" id="book-name" type="text" placeholder="Budi Santoso">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Nomor WhatsApp</label>
-                <input class="form-input" id="book-phone" type="tel" placeholder="08123456789">
-              </div>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">
+                    Masuk
+                </button>
+                <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">
+                    Daftar
+                </button>
             </div>
 
-            <div style="margin-top:.5rem;padding-top:1.5rem;border-top:1.5px solid var(--gray);margin-bottom:1.5rem;">
-              <div class="form-step" style="border:none;padding:0;margin-bottom:1.5rem;">
-                <div class="step-num">2</div>
-                <div class="step-label">Pilih Lapangan & Tanggal</div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label">Lapangan</label>
-                  <select class="form-select" id="book-court" onchange="onCourtOrDateChange()">
-                    <option value="">— Pilih Lapangan —</option>
-                  </select>
+            <!-- LOGIN -->
+            <div class="auth-panel active" id="panel-login">
+                <div class="auth-title">SELAMAT DATANG</div>
+                <div class="auth-subtitle">Masuk ke akun MoSe Anda</div>
+                <div class="auth-alert" id="login-alert"></div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Email</label>
+                    <input class="auth-input" id="login-email" type="email" placeholder="contoh@email.com"
+                        autocomplete="email" />
+                    <div class="auth-error" id="login-email-err">
+                        Format email tidak valid
+                    </div>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Tanggal</label>
-                  <input class="form-input" id="book-date" type="date" oninput="onCourtOrDateChange()">
+                <div class="auth-form-group">
+                    <label class="auth-label">Password</label>
+                    <div class="auth-input-wrap">
+                        <input class="auth-input" id="login-pw" type="password" placeholder="Masukkan password"
+                            autocomplete="current-password" />
+                        <button class="toggle-pw" onclick="togglePw('login-pw', this)" tabindex="-1">
+                            👁
+                        </button>
+                    </div>
+                    <div class="auth-error" id="login-pw-err">
+                        Password tidak boleh kosong
+                    </div>
                 </div>
-              </div>
-            </div>
-
-            <div style="padding-top:1.5rem;border-top:1.5px solid var(--gray);margin-bottom:1.5rem;">
-              <div class="form-step" style="border:none;padding:0;margin-bottom:1.5rem;">
-                <div class="step-num">3</div>
-                <div class="step-label">Pilih Jam (klik untuk memilih)</div>
-              </div>
-              <div class="time-slot-picker" id="time-slots">
-                <div style="grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--text-light);font-size:14px;">Pilih lapangan dan tanggal terlebih dahulu</div>
-              </div>
-              <p style="font-size:12px;color:var(--text-light);margin-top:8px;">* Slot abu-abu sudah dipesan untuk tanggal ini</p>
-            </div>
-
-            <div style="padding-top:1.5rem;border-top:1.5px solid var(--gray);margin-bottom:1.5rem;">
-              <div class="form-step" style="border:none;padding:0;margin-bottom:1.5rem;">
-                <div class="step-num">4</div>
-                <div class="step-label">Metode Pembayaran</div>
-              </div>
-              <div style="background:linear-gradient(135deg,rgba(15,158,110,0.12),rgba(26,95,168,0.08));border:1.5px solid rgba(19,201,142,0.35);border-radius:14px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;">
-                <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--teal),var(--blue-light));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">⬛</div>
-                <div>
-                  <div style="font-weight:700;font-size:15px;color:var(--navy);margin-bottom:3px;">QRIS</div>
-                  <div style="font-size:13px;color:var(--text-mid);">Scan QR Code · GoPay · OVO · Dana · ShopeePay · dan semua e-wallet</div>
+                <button class="auth-btn" id="login-btn" onclick="doLogin()">
+                    🔑 Masuk
+                </button>
+                <div class="auth-divider">
+                    Belum punya akun?
+                    <span onclick="switchAuthTab('register')">Daftar sekarang</span>
                 </div>
-                <div style="margin-left:auto;background:rgba(19,201,142,0.15);border:1px solid rgba(19,201,142,0.4);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:700;color:var(--teal);">CASHLESS ONLY</div>
-              </div>
-              <div class="form-group" style="margin-top:1rem;margin-bottom:0;">
-                <label class="form-label">Catatan Khusus</label>
-                <input class="form-input" id="book-note" type="text" placeholder="Opsional...">
-              </div>
             </div>
 
-            <button class="submit-btn" id="submit-btn" onclick="submitBooking()">⚡ KONFIRMASI BOOKING</button>
-          </div>
-
-          <!-- Summary Sidebar -->
-          <div class="booking-summary">
-            <div class="summary-title">RINGKASAN BOOKING</div>
-            <div class="summary-row"><div class="summary-key">Nama</div><div class="summary-val" id="sum-name">—</div></div>
-            <div class="summary-row"><div class="summary-key">Lapangan</div><div class="summary-val" id="sum-court">—</div></div>
-            <div class="summary-row"><div class="summary-key">Tanggal</div><div class="summary-val" id="sum-date">—</div></div>
-            <div class="summary-row"><div class="summary-key">Jam</div><div class="summary-val" id="sum-time">—</div></div>
-            <div class="summary-row"><div class="summary-key">Durasi</div><div class="summary-val" id="sum-dur">—</div></div>
-            <div class="summary-row"><div class="summary-key">Pembayaran</div><div class="summary-val" id="sum-pay">QRIS</div></div>
-            <div class="summary-row summary-total"><div class="summary-key">Total</div><div class="summary-val" id="sum-total">Rp 0</div></div>
-
-            <!-- Riwayat Booking User -->
-            <div class="my-bookings-section" id="my-bookings-section">
-              <div class="recent-title">BOOKING SAYA</div>
-              <div id="my-bookings-list"><div style="font-size:12px;color:rgba(255,255,255,0.3);text-align:center;padding:1rem;">Memuat riwayat...</div></div>
+            <!-- REGISTER -->
+            <div class="auth-panel" id="panel-register">
+                <div class="auth-title">BUAT AKUN</div>
+                <div class="auth-subtitle">Daftar dan mulai booking lapangan</div>
+                <div class="auth-alert" id="reg-alert"></div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Nama Lengkap</label>
+                    <input class="auth-input" id="reg-name" type="text" placeholder="Nama lengkap Anda"
+                        autocomplete="name" />
+                    <div class="auth-error" id="reg-name-err">
+                        Nama minimal 2 karakter
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Email</label>
+                    <input class="auth-input" id="reg-email" type="email" placeholder="contoh@email.com"
+                        autocomplete="email" />
+                    <div class="auth-error" id="reg-email-err">
+                        Format email tidak valid
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Nomor WhatsApp</label>
+                    <input class="auth-input" id="reg-phone" type="tel" placeholder="08123456789" autocomplete="tel" />
+                    <div class="auth-error" id="reg-phone-err">
+                        Nomor WA minimal 10 digit
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Password</label>
+                    <div class="auth-input-wrap">
+                        <input class="auth-input" id="reg-pw" type="password" placeholder="Minimal 6 karakter"
+                            autocomplete="new-password" />
+                        <button class="toggle-pw" onclick="togglePw('reg-pw', this)" tabindex="-1">
+                            👁
+                        </button>
+                    </div>
+                    <div class="auth-error" id="reg-pw-err">
+                        Password minimal 6 karakter
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Konfirmasi Password</label>
+                    <div class="auth-input-wrap">
+                        <input class="auth-input" id="reg-pw2" type="password" placeholder="Ulangi password"
+                            autocomplete="new-password" />
+                        <button class="toggle-pw" onclick="togglePw('reg-pw2', this)" tabindex="-1">
+                            👁
+                        </button>
+                    </div>
+                    <div class="auth-error" id="reg-pw2-err">Password tidak cocok</div>
+                </div>
+                <button class="auth-btn" id="reg-btn" onclick="doRegister()">
+                    ✨ Buat Akun
+                </button>
+                <div class="auth-divider">
+                    Sudah punya akun?
+                    <span onclick="switchAuthTab('login')">Masuk di sini</span>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <footer>Dibuat dengan ❤️ oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
-</section>
-
-<!-- ═══════════ PROFILE ═══════════ -->
-<section id="profile" class="section">
-  <div class="profile-wrap">
-    <div class="profile-container">
-      <div class="profile-header-label">AKUN SAYA</div>
-      <div class="profile-page-title">EDIT PROFIL</div>
-
-      <!-- ── Avatar card ── -->
-      <div class="profile-avatar-card">
-        <div class="profile-avatar-wrap">
-          <div class="profile-avatar-img" id="profile-avatar-display"></div>
-          <button class="avatar-edit-btn" onclick="openAvatarModal()" title="Ganti foto profil">✏️</button>
-        </div>
-        <div class="profile-avatar-info">
-          <div class="profile-display-name" id="profile-display-name">—</div>
-          <div class="profile-display-email" id="profile-display-email">—</div>
-          <div class="profile-avatar-hint">Klik ✏️ untuk mengganti foto profil</div>
-        </div>
-      </div>
-
-      <!-- ── Data Diri ── -->
-      <div class="profile-form-card">
-        <div class="profile-card-title">👤 DATA DIRI</div>
-        <div class="profile-alert" id="profile-info-alert"></div>
-
-        <div class="profile-form-group">
-          <label class="profile-label">Nama Lengkap</label>
-          <input class="profile-input" id="profile-nama" type="text" placeholder="Nama lengkap Anda">
-        </div>
-
-        <div class="profile-form-group">
-          <label class="profile-label">Nomor WhatsApp</label>
-          <input class="profile-input profile-input-locked" id="profile-phone" type="tel" disabled>
-          <div class="profile-lock-note">🔒 Nomor WhatsApp tidak dapat diubah</div>
-        </div>
-
-        <div class="profile-form-group">
-          <label class="profile-label">Email</label>
-          <input class="profile-input profile-input-locked" id="profile-email" type="email" disabled>
-          <div class="profile-lock-note">🔒 Email tidak dapat diubah</div>
-        </div>
-
-        <button class="profile-save-btn" id="profile-save-btn" onclick="saveProfileInfo()">💾 Simpan Perubahan</button>
-      </div>
-
-      <!-- ── Ganti Password ── -->
-      <div class="profile-form-card">
-        <div class="profile-card-title">🔐 GANTI PASSWORD</div>
-        <div class="profile-alert" id="profile-pw-alert"></div>
-
-        <div class="profile-form-group">
-          <label class="profile-label">Password Lama</label>
-          <div class="profile-input-wrap">
-            <input class="profile-input" id="profile-old-pw" type="password" placeholder="Masukkan password saat ini">
-            <button class="profile-toggle-pw" onclick="toggleProfilePw('profile-old-pw',this)" tabindex="-1">👁</button>
-          </div>
-        </div>
-
-        <div class="profile-form-group">
-          <label class="profile-label">Password Baru</label>
-          <div class="profile-input-wrap">
-            <input class="profile-input" id="profile-new-pw" type="password" placeholder="Minimal 6 karakter">
-            <button class="profile-toggle-pw" onclick="toggleProfilePw('profile-new-pw',this)" tabindex="-1">👁</button>
-          </div>
-        </div>
-
-        <div class="profile-form-group">
-          <label class="profile-label">Konfirmasi Password Baru</label>
-          <div class="profile-input-wrap">
-            <input class="profile-input" id="profile-new-pw2" type="password" placeholder="Ulangi password baru">
-            <button class="profile-toggle-pw" onclick="toggleProfilePw('profile-new-pw2',this)" tabindex="-1">👁</button>
-          </div>
-        </div>
-
-        <button class="profile-save-btn" id="profile-pw-btn" onclick="saveProfilePassword()">🔑 Ganti Password</button>
-      </div>
-    </div>
-  </div>
-  <footer>Dibuat oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
-</section>
-
-<!-- ═══════════ AVATAR UPLOAD MODAL ═══════════ -->
-<div class="avatar-upload-overlay" id="avatar-upload-overlay">
-  <div class="avatar-upload-card">
-    <div class="avatar-upload-title">📸 GANTI FOTO PROFIL</div>
-
-    <div class="avatar-drop-zone" id="avatar-drop-zone"
-        onclick="document.getElementById('avatar-file-input').click()"
-        ondragover="avatarDragOver(event)"
-        ondragleave="avatarDragLeave(event)"
-        ondrop="avatarDrop(event)">
-      <div class="avatar-drop-icon">🖼️</div>
-      <div class="avatar-drop-text">Seret foto ke sini, atau <span>pilih file</span></div>
-      <div class="avatar-drop-hint">JPG, PNG, WebP · Maks. 2 MB</div>
-    </div>
-    <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="avatarFileSelected(this.files[0])">
-
-    <div class="avatar-preview-wrap" id="avatar-preview-wrap">
-      <img class="avatar-preview-img" id="avatar-preview-img" src="" alt="Preview">
-      <div class="avatar-preview-name" id="avatar-preview-name"></div>
     </div>
 
-    <div class="avatar-upload-actions">
-      <button class="avatar-cancel-btn" onclick="closeAvatarModal()">Batal</button>
-      <button class="avatar-confirm-btn" id="avatar-confirm-btn" onclick="uploadAvatar()" disabled>⬆️ Upload</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ QRIS PAYMENT MODAL ═══════════ -->
-<div class="qris-overlay" id="qris-overlay">
-  <div class="qris-card">
-    <!-- Header -->
-    <div class="qris-header">
-      <div class="qris-header-left">
-        <div class="qris-logo-icon">⬛</div>
-        <div>
-          <div class="qris-title">PEMBAYARAN QRIS</div>
-          <div class="qris-subtitle">Scan untuk membayar</div>
+    <!-- ═══════════ NAVBAR ═══════════ -->
+    <nav>
+        <div class="nav-brand">
+            <div class="nav-logo-icon">
+                <img src="logo.png" alt="Logo Perusahaan" style="border-radius: 50%" width="150" height="50" />
+            </div>
+            <div class="nav-brand-text">Mo<span>Se</span></div>
         </div>
-      </div>
-      <div class="qris-timer-wrap">
-        <svg class="qris-timer-ring" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(19,201,142,0.2)" stroke-width="3"/>
-          <circle id="qris-timer-circle" cx="22" cy="22" r="18" fill="none" stroke="#13c98e" stroke-width="3"
-            stroke-dasharray="113" stroke-dashoffset="0" stroke-linecap="round"
-            transform="rotate(-90 22 22)" style="transition:stroke-dashoffset 1s linear;"/>
-        </svg>
-        <span class="qris-timer-text" id="qris-timer-text">05:00</span>
-      </div>
+        <ul class="nav-links" id="nav-links">
+            <li>
+                <a href="#" onclick="
+              showSection('home');
+              closeMenu();
+            " id="nav-home" class="active">Home</a>
+            </li>
+            <li>
+                <a href="#" onclick="
+              showSection('schedule');
+              closeMenu();
+            " id="nav-schedule">Jadwal</a>
+            </li>
+            <li>
+                <a href="#" onclick="
+              showSection('courts');
+              closeMenu();
+            " id="nav-courts">Court</a>
+            </li>
+            <li>
+                <a href="#" onclick="
+              showSection('booking');
+              closeMenu();
+            " id="nav-booking" class="nav-cta">Booking</a>
+            </li>
+            <li>
+                <a href="#" onclick="
+              showSection('profile');
+              closeMenu();
+            " id="nav-profile" style="display: none">👤 Profil</a>
+            </li>
+        </ul>
+        <div id="nav-user-area"></div>
+        <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- ═══════════ SECTIONS (dimuat via JS) ═══════════ -->
+    <div id="sections-container">
+        <!-- Sections diinjeksi oleh loadSections() -->
     </div>
 
-    <!-- Body -->
-    <div class="qris-body">
-      <!-- Amount -->
-      <div class="qris-amount-box">
-        <div class="qris-amount-label">Total Pembayaran</div>
-        <div class="qris-amount-val" id="qris-amount">Rp 0</div>
-        <div class="qris-booking-ref" id="qris-booking-ref">Booking #—</div>
-      </div>
-
-      <!-- QR Code area -->
-      <div class="qris-qr-wrap">
-        <div class="qris-qr-inner" id="qris-qr-inner">
-          <!-- QR generated by JS -->
+    <!-- ═══════════ AVATAR UPLOAD MODAL ═══════════ -->
+    <div class="avatar-upload-overlay" id="avatar-upload-overlay">
+        <div class="avatar-upload-card">
+            <div class="avatar-upload-title">📸 GANTI FOTO PROFIL</div>
+            <div class="avatar-drop-zone" id="avatar-drop-zone"
+                onclick="document.getElementById('avatar-file-input').click()" ondragover="avatarDragOver(event)"
+                ondragleave="avatarDragLeave(event)" ondrop="avatarDrop(event)">
+                <div class="avatar-drop-icon">🖼️</div>
+                <div class="avatar-drop-text">
+                    Seret foto ke sini, atau <span>pilih file</span>
+                </div>
+                <div class="avatar-drop-hint">JPG, PNG, WebP · Maks. 2 MB</div>
+            </div>
+            <input type="file" id="avatar-file-input" accept="image/*" style="display: none"
+                onchange="avatarFileSelected(this.files[0])" />
+            <div class="avatar-preview-wrap" id="avatar-preview-wrap">
+                <img class="avatar-preview-img" id="avatar-preview-img" src="" alt="Preview" />
+                <div class="avatar-preview-name" id="avatar-preview-name"></div>
+            </div>
+            <div class="avatar-upload-actions">
+                <button class="avatar-cancel-btn" onclick="closeAvatarModal()">
+                    Batal
+                </button>
+                <button class="avatar-confirm-btn" id="avatar-confirm-btn" onclick="uploadAvatar()" disabled>
+                    ⬆️ Upload
+                </button>
+            </div>
         </div>
-        <div class="qris-scan-hint">Scan dengan aplikasi e-wallet favoritmu</div>
-        <div class="qris-wallets">
-          <span class="wallet-badge">GoPay</span>
-          <span class="wallet-badge">OVO</span>
-          <span class="wallet-badge">Dana</span>
-          <span class="wallet-badge">ShopeePay</span>
-          <span class="wallet-badge">LinkAja</span>
-          <span class="wallet-badge">+ Semua Bank</span>
+    </div>
+
+    <!-- ═══════════ QRIS PAYMENT MODAL ═══════════ -->
+    <div class="qris-overlay" id="qris-overlay">
+        <div class="qris-card">
+            <div class="qris-header">
+                <div class="qris-header-left">
+                    <div class="qris-logo-icon">⬛</div>
+                    <div>
+                        <div class="qris-title">PEMBAYARAN QRIS</div>
+                        <div class="qris-subtitle">Scan untuk membayar</div>
+                    </div>
+                </div>
+                <div class="qris-timer-wrap">
+                    <svg class="qris-timer-ring" viewBox="0 0 44 44">
+                        <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(19,201,142,0.2)" stroke-width="3" />
+                        <circle id="qris-timer-circle" cx="22" cy="22" r="18" fill="none" stroke="#13c98e"
+                            stroke-width="3" stroke-dasharray="113" stroke-dashoffset="0" stroke-linecap="round"
+                            transform="rotate(-90 22 22)" style="transition: stroke-dashoffset 1s linear" />
+                    </svg>
+                    <span class="qris-timer-text" id="qris-timer-text">05:00</span>
+                </div>
+            </div>
+            <div class="qris-body">
+                <div class="qris-amount-box">
+                    <div class="qris-amount-label">Total Pembayaran</div>
+                    <div class="qris-amount-val" id="qris-amount">Rp 0</div>
+                    <div class="qris-booking-ref" id="qris-booking-ref">Booking #—</div>
+                </div>
+                <div class="qris-qr-wrap">
+                    <div class="qris-qr-inner" id="qris-qr-inner"></div>
+                    <div class="qris-scan-hint">
+                        Scan dengan aplikasi e-wallet favoritmu
+                    </div>
+                    <div class="qris-wallets">
+                        <span class="wallet-badge">GoPay</span>
+                        <span class="wallet-badge">OVO</span>
+                        <span class="wallet-badge">Dana</span>
+                        <span class="wallet-badge">ShopeePay</span>
+                        <span class="wallet-badge">LinkAja</span>
+                        <span class="wallet-badge">+ Semua Bank</span>
+                    </div>
+                </div>
+                <div class="qris-steps">
+                    <div class="qris-step">
+                        <div class="qris-step-num">1</div>
+                        <div class="qris-step-txt">
+                            Buka aplikasi e-wallet atau m-banking kamu
+                        </div>
+                    </div>
+                    <div class="qris-step">
+                        <div class="qris-step-num">2</div>
+                        <div class="qris-step-txt">
+                            Pilih menu <strong>Scan QR</strong> atau <strong>QRIS</strong>
+                        </div>
+                    </div>
+                    <div class="qris-step">
+                        <div class="qris-step-num">3</div>
+                        <div class="qris-step-txt">
+                            Scan QR di atas, lalu konfirmasi pembayaran
+                        </div>
+                    </div>
+                    <div class="qris-step">
+                        <div class="qris-step-num">4</div>
+                        <div class="qris-step-txt">
+                            Klik <strong>"Saya Sudah Bayar"</strong> setelah transaksi
+                            berhasil
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="qris-footer">
+                <button class="qris-cancel-btn" onclick="cancelQrisPayment()">
+                    ✕ Batalkan
+                </button>
+                <button class="qris-confirm-btn" id="qris-confirm-btn" onclick="confirmQrisPayment()">
+                    <span id="qris-confirm-content">✅ Saya Sudah Bayar</span>
+                </button>
+            </div>
+            <div class="qris-success" id="qris-success" style="display: none">
+                <div class="qris-success-icon">✅</div>
+                <div class="qris-success-title">PEMBAYARAN BERHASIL!</div>
+                <div class="qris-success-desc" id="qris-success-desc">
+                    Booking kamu telah dikonfirmasi.
+                </div>
+                <button class="qris-done-btn" onclick="closeQrisModal()">
+                    Lihat Booking Saya
+                </button>
+            </div>
         </div>
-      </div>
-
-      <!-- Steps -->
-      <div class="qris-steps">
-        <div class="qris-step"><div class="qris-step-num">1</div><div class="qris-step-txt">Buka aplikasi e-wallet atau m-banking kamu</div></div>
-        <div class="qris-step"><div class="qris-step-num">2</div><div class="qris-step-txt">Pilih menu <strong>Scan QR</strong> atau <strong>QRIS</strong></div></div>
-        <div class="qris-step"><div class="qris-step-num">3</div><div class="qris-step-txt">Scan QR di atas, lalu konfirmasi pembayaran</div></div>
-        <div class="qris-step"><div class="qris-step-num">4</div><div class="qris-step-txt">Klik <strong>"Saya Sudah Bayar"</strong> setelah transaksi berhasil</div></div>
-      </div>
     </div>
 
-    <!-- Footer actions -->
-    <div class="qris-footer">
-      <button class="qris-cancel-btn" onclick="cancelQrisPayment()">✕ Batalkan</button>
-      <button class="qris-confirm-btn" id="qris-confirm-btn" onclick="confirmQrisPayment()">
-        <span id="qris-confirm-content">✅ Saya Sudah Bayar</span>
-      </button>
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✅</span>
+        <span id="toast-msg">Booking berhasil!</span>
     </div>
 
-    <!-- Success state (hidden initially) -->
-    <div class="qris-success" id="qris-success" style="display:none;">
-      <div class="qris-success-icon">✅</div>
-      <div class="qris-success-title">PEMBAYARAN BERHASIL!</div>
-      <div class="qris-success-desc" id="qris-success-desc">Booking kamu telah dikonfirmasi.</div>
-      <button class="qris-done-btn" onclick="closeQrisModal()">Lihat Booking Saya</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
-
-<div class="toast" id="toast">
-  <span class="toast-icon">✅</span>
-  <span id="toast-msg">Booking berhasil!</span>
-</div>
-
-<script>
-// ═══════════════════════════════════════════════════════════
-// CONFIG: Sesuaikan BASE_URL dengan lokasi server PHP Anda
-// ═══════════════════════════════════════════════════════════
-const BASE_URL = 'http://localhost/mose/api'; // Ganti sesuai server XAMPP Anda
-
-// ─── Helpers ─────────────────────────────────────────────────
-const SESSION_KEY = 'mose_session';
-const getSession  = () => JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
-const saveSession = d  => localStorage.setItem(SESSION_KEY, JSON.stringify(d));
-const clearSess   = () => localStorage.removeItem(SESSION_KEY);
-
-function authHeader() {
-  const s = getSession();
-  return s ? { 'Authorization': 'Bearer ' + s.token, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
-}
-
-async function apiCall(endpoint, options = {}) {
-    try {
-        const s = getSession();
-        const token = s ? s.token : null;
-
-        // Selalu tambahkan token ke URL query string
-        const sep = endpoint.includes('?') ? '&' : '?';
-        const url = BASE_URL + endpoint + (token ? sep + 'token=' + encodeURIComponent(token) : '');
-
-        // Hapus Authorization header, kirim token via URL saja
-        const headers = { 'Content-Type': 'application/json' };
-
-        const res = await fetch(url, {
-            headers,
-            ...options
-        });
-        return await res.json();
-    } catch(e) {
-        return { success: false, message: 'Gagal terhubung ke server. Pastikan server PHP berjalan.' };
-    }
-}
-
-function showToast(msg, isError = false) {
-  const t = document.getElementById('toast');
-  const icon = document.getElementById('toast');
-  document.getElementById('toast-msg').textContent = msg;
-  t.style.borderColor = isError ? 'rgba(255,107,107,0.4)' : 'rgba(19,201,142,0.3)';
-  t.querySelector('.toast-icon').textContent = isError ? '❌' : '✅';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3200);
-}
-
-// ═══════════════════════════════════════════════════════════
-// AUTH SYSTEM
-// ═══════════════════════════════════════════════════════════
-
-function openAuthOverlay(tab) {
-  if (tab) switchAuthTab(tab);
-  document.getElementById('auth-overlay').classList.add('visible');
-}
-
-function closeAuthOverlay() {
-  document.getElementById('auth-overlay').classList.remove('visible');
-}
-
-function switchAuthTab(tab) {
-  document.getElementById('panel-login').classList.toggle('active', tab === 'login');
-  document.getElementById('panel-register').classList.toggle('active', tab === 'register');
-  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
-  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
-  ['login-alert','reg-alert'].forEach(id => {
-    document.getElementById(id).classList.remove('show','auth-alert-success');
-  });
-}
-
-function togglePw(inputId, btn) {
-  const inp = document.getElementById(inputId);
-  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
-  else { inp.type = 'password'; btn.textContent = '👁'; }
-}
-
-// ─── Register ─────────────────────────────────────────────
-async function doRegister() {
-  clearAuthErrors();
-  const name  = document.getElementById('reg-name').value.trim();
-  const email = document.getElementById('reg-email').value.trim().toLowerCase();
-  const phone = document.getElementById('reg-phone').value.trim();
-  const pw    = document.getElementById('reg-pw').value;
-  const pw2   = document.getElementById('reg-pw2').value;
-  let ok = true;
-
-  if (name.length < 2)         { showFieldErr('reg-name-err');  document.getElementById('reg-name').classList.add('error');  ok = false; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFieldErr('reg-email-err'); document.getElementById('reg-email').classList.add('error'); ok = false; }
-  if (phone.replace(/\D/g,'').length < 10) { showFieldErr('reg-phone-err'); document.getElementById('reg-phone').classList.add('error'); ok = false; }
-  if (pw.length < 6)           { showFieldErr('reg-pw-err');    document.getElementById('reg-pw').classList.add('error');    ok = false; }
-  if (pw !== pw2)              { showFieldErr('reg-pw2-err');   document.getElementById('reg-pw2').classList.add('error');   ok = false; }
-  if (!ok) return;
-
-  const btn = document.getElementById('reg-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Mendaftar...';
-
-  const res = await apiCall('/auth.php?action=register', {
-    method: 'POST',
-    body: JSON.stringify({ nama_lengkap: name, email, nomor_handphone: phone, password: pw })
-  });
-
-  btn.disabled = false;
-  btn.innerHTML = '✨ Buat Akun';
-
-  if (!res.success) {
-    showAlert('reg-alert', '❌ ' + res.message);
-    return;
-  }
-
-  // Auto-login setelah register
-  showAlert('reg-alert', '✅ Akun berhasil dibuat! Sedang masuk...', true);
-  setTimeout(() => doLoginAfterRegister(email, pw), 800);
-}
-
-async function doLoginAfterRegister(email, pw) {
-  const res = await apiCall('/auth.php?action=login', {
-    method: 'POST',
-    body: JSON.stringify({ email, password: pw })
-  });
-  if (res.success) {
-    saveSession({ ...res.user, token: res.token });
-    closeAuthOverlay();
-    onLoginSuccess();
-  }
-}
-
-// ─── Login ────────────────────────────────────────────────
-async function doLogin() {
-  clearAuthErrors();
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const pw    = document.getElementById('login-pw').value;
-  let ok = true;
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFieldErr('login-email-err'); document.getElementById('login-email').classList.add('error'); ok = false; }
-  if (!pw) { showFieldErr('login-pw-err'); document.getElementById('login-pw').classList.add('error'); ok = false; }
-  if (!ok) return;
-
-  const btn = document.getElementById('login-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Masuk...';
-
-  const res = await apiCall('/auth.php?action=login', {
-    method: 'POST',
-    body: JSON.stringify({ email, password: pw })
-  });
-
-  btn.disabled = false;
-  btn.innerHTML = '🔑 Masuk';
-
-  if (!res.success) {
-    showAlert('login-alert', '❌ ' + res.message);
-    return;
-  }
-
-  saveSession({ ...res.user, token: res.token });
-  closeAuthOverlay();
-  onLoginSuccess();
-}
-
-// ─── Logout ───────────────────────────────────────────────
-function doLogout() {
-  clearSess();
-  updateNavUser();
-  showSection('home');
-  showToast('👋 Kamu telah keluar dari akun.');
-}
-
-// ─── After login success ──────────────────────────────────
-function onLoginSuccess() {
-  updateNavUser();
-  autofillBooking();
-  loadCourtsForBooking();
-  loadMyBookings();
-  showToast('✅ Selamat datang, ' + getSession().nama_lengkap.split(' ')[0] + '!');
-}
-
-// ─── Navbar user area ─────────────────────────────────────
-function updateNavUser() {
-  const user = getSession();
-  const area = document.getElementById('nav-user-area');
-  const navProfile = document.getElementById('nav-profile');
-
-  if (user) {
-    const initials = user.nama_lengkap.split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
-    const avatarHtml = user.foto_profil
-      ? `<img src="${BASE_URL.replace('/api','')}/${user.foto_profil}" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid rgba(19,201,142,0.4);" onerror="this.outerHTML='<div class=\'nav-user-avatar\'>${initials}</div>'">`
-      : `<div class="nav-user-avatar">${initials}</div>`;
-    area.innerHTML = `
-      <div class="nav-user">
-        <div style="cursor:pointer" onclick="showSection('profile')">${avatarHtml}</div>
-        <span class="nav-user-name" style="cursor:pointer" onclick="showSection('profile')">${user.nama_lengkap.split(' ')[0]}</span>
-        <button class="nav-logout-btn" onclick="doLogout()">Keluar</button>
-      </div>`;
-    if (navProfile) navProfile.style.display = '';
-  } else {
-    area.innerHTML = `<button class="nav-login-btn" onclick="openAuthOverlay('login')">🔑 Masuk</button>`;
-    if (navProfile) navProfile.style.display = 'none';
-  }
-}
-
-// ─── Auth helpers ─────────────────────────────────────────
-function showFieldErr(id) { document.getElementById(id).classList.add('show'); }
-function clearAuthErrors() {
-  document.querySelectorAll('.auth-error').forEach(e => e.classList.remove('show'));
-  document.querySelectorAll('.auth-input').forEach(e => e.classList.remove('error'));
-}
-function showAlert(id, msg, success = false) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.classList.add('show');
-  if (success) el.classList.add('auth-alert-success');
-  else el.classList.remove('auth-alert-success');
-}
-
-// ═══════════════════════════════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════════════════════════════
-
-function showSection(id) {
-  if (id === 'booking' && !getSession()) {
-    openAuthOverlay('login');
-    return;
-  }
-  if (id === 'profile' && !getSession()) {
-    openAuthOverlay('login');
-    return;
-  }
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  const navEl = document.getElementById('nav-' + id);
-  if (navEl) navEl.classList.add('active');
-  window.scrollTo(0, 0);
-
-  if (id === 'schedule') renderSchedulePage();
-  if (id === 'booking')  refreshBookingGate();
-  if (id === 'courts')   loadCourtsPage();
-  if (id === 'profile')  loadProfilePage();
-}
-
-// ═══════════════════════════════════════════════════════════
-// COURTS — HALAMAN & PREVIEW HOME
-// ═══════════════════════════════════════════════════════════
-
-const COURT_INFO = {
-  1: { label:'LAPANGAN A', type:'🏅 Kelas Standard · Lantai Vinyl',     info:[['❄️','Full AC'],['💡','LED 600 lux'],['🎯','Net Standard'],['🏪','Kantin Dekat']], bg:'linear-gradient(160deg,#0d3060 0%,#0a5a3a 100%)' },
-  2: { label:'LAPANGAN B', type:'🏅 Kelas Standard · Lantai Vinyl',     info:[['❄️','Full AC'],['💡','LED 600 lux'],['🎯','Net Standard'],['🏪','Kantin Dekat']], bg:'linear-gradient(160deg,#0d3060 0%,#0a5a3a 100%)' },
-  3: { label:'LAPANGAN C', type:'🏅 Kelas Standard · Lantai Vinyl',     info:[['🌬️','Kipas Besar'],['💡','LED 600 lux'],['🎯','Net Standard'],['🚿','Shower Nearby']], bg:'linear-gradient(160deg,#122a50 0%,#0c6040 100%)' },
-  4: { label:'LAPANGAN C', type:'🏅 Kelas Standard · Lantai Vinyl',     info:[['🌬️','Kipas Besar'],['💡','LED 600 lux'],['🎯','Net Standard'],['🚿','Shower Nearby']], bg:'linear-gradient(160deg,#122a50 0%,#0c6040 100%)' }
-};
-
-const COURT_PRICES_LABEL = { 1:'Rp 50.000 – 100.000', 2:'Rp 50.000 – 100.000', 3:'Rp 50.000 – 100.000', 4:'Rp 50.000 – 100.000' };
-
-async function loadCourtsPage() {
-  const grid = document.getElementById('courts-grid');
-  const res  = await apiCall('/courts.php');
-  if (!res.success || !res.data.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">Gagal memuat data lapangan</div>';
-    return;
-  }
-
-  // Ambil jadwal hari ini untuk masing-masing lapangan
-  const today = new Date().toISOString().split('T')[0];
-  const schedPromises = res.data.map(c => apiCall(`/schedules.php?court_id=${c.court_id}&date=${today}`));
-  const scheds = await Promise.all(schedPromises);
-
-  grid.innerHTML = res.data.map((court, i) => {
-    const info = COURT_INFO[court.court_id] || COURT_INFO[1];
-    const sched = scheds[i];
-    const availCount = sched.success ? sched.data.filter(s => s.availability === 'available').length : 0;
-    const totalSlots = sched.success ? sched.data.length : 0;
-    const statusLabel = availCount > 0 ? '✓ Tersedia' : '✗ Penuh';
-    const statusColor = availCount > 0 ? 'rgba(19,201,142,0.2);color:#13c98e;border:1px solid rgba(19,201,142,0.4)' : 'rgba(255,80,80,0.2);color:#ff8080;border:1px solid rgba(255,80,80,0.4)';
-
-    const minPrice = sched.success && sched.data.length ? Math.min(...sched.data.map(s => s.price)) : 50000;
-    const infoRows = info.info.slice(0,2).map(([ic,tx]) => `<div class="court-info-item">${ic} <span>${tx}</span></div>`).join('');
-    const infoRows2 = info.info.slice(2,4).map(([ic,tx]) => `<div class="court-info-item">${ic} <span>${tx}</span></div>`).join('');
-
-    return `
-    <div class="court-detail-card">
-      <div class="court-img" style="background:${info.bg}">
-        <svg width="200" height="100" viewBox="0 0 200 100">
-          <rect x="10" y="10" width="180" height="80" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-          <line x1="100" y1="10" x2="100" y2="90" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-          <line x1="10" y1="50" x2="190" y2="50" stroke="rgba(255,255,255,0.8)" stroke-width="2.5"/>
-          <rect x="30" y="10" width="140" height="80" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-        </svg>
-        <div class="court-number-badge">${info.label}</div>
-        <div style="position:absolute;top:14px;right:14px;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;background:${statusColor};">${statusLabel}</div>
-      </div>
-      <div class="court-body">
-        <div class="court-title">${court.nama_lapangan}</div>
-        <div class="court-type">${info.type}</div>
-        <div class="court-info-row">${infoRows}</div>
-        <div class="court-info-row">${infoRows2}</div>
-        <div class="court-price">
-          <div>
-            <div class="price-text">Rp ${minPrice.toLocaleString('id-ID')}</div>
-            <div class="price-sub">mulai dari / jam · ${availCount}/${totalSlots} slot tersedia</div>
-          </div>
-          <button class="book-btn" onclick="prefillBooking('${court.court_id}')">⚡ Booking</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-async function loadHeroPreview() {
-  const res = await apiCall('/courts.php');
-  const preview = document.getElementById('hero-court-preview');
-  if (!res.success || !res.data.length) return;
-  const today = new Date().toISOString().split('T')[0];
-  const scheds = await Promise.all(res.data.slice(0,4).map(c => apiCall(`/schedules.php?court_id=${c.court_id}&date=${today}`)));
-
-  preview.innerHTML = res.data.slice(0,4).map((court, i) => {
-    const sched = scheds[i];
-    const slots = sched.success ? sched.data.slice(0,6) : [];
-    const availCount = slots.filter(s => s.availability === 'available').length;
-    const statusLabel = availCount > 0 ? 'Tersedia' : 'Penuh';
-    const statusClass = availCount > 0 ? 'status-open' : 'status-busy';
-
-    const slotPills = slots.map(s =>
-      `<span class="slot ${s.availability === 'available' ? 'slot-open' : 'slot-taken'}">${s.start_time.slice(0,5)}</span>`
-    ).join('');
-
-    return `
-    <div class="court-card">
-      <div class="court-card-header">
-        <div class="court-name">🏸 ${court.nama_lapangan}</div>
-        <span class="court-status ${statusClass}">${statusLabel}</span>
-      </div>
-      <div class="court-slots">${slotPills || '<span style="color:rgba(255,255,255,0.3);font-size:12px;">Tidak ada jadwal hari ini</span>'}</div>
-    </div>`;
-  }).join('');
-}
-
-// ═══════════════════════════════════════════════════════════
-// SCHEDULE — JADWAL REAL-TIME
-// ═══════════════════════════════════════════════════════════
-
-let currentScheduleDate = new Date().toISOString().split('T')[0];
-let scheduleData = {}; // { courtId: [...slots] }
-
-function buildDateButtons() {
-  const container = document.getElementById('date-selector-btns');
-  const days = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
-  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  let html = '';
-  for (let i = 0; i < 7; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    const iso = d.toISOString().split('T')[0];
-    const isActive = iso === currentScheduleDate ? 'active' : '';
-    html += `<button class="date-btn ${isActive}" onclick="setScheduleDate('${iso}',this)">
-      ${days[d.getDay()]}<br><span style="font-size:10px;opacity:.7">${d.getDate()} ${months[d.getMonth()]}</span>
-    </button>`;
-  }
-  container.innerHTML = html;
-}
-
-function setScheduleDate(date, btn) {
-  currentScheduleDate = date;
-  document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  document.getElementById('schedule-date-picker').value = date;
-  renderSchedulePage();
-}
-
-async function renderSchedulePage() {
-  buildDateButtons();
-  const body = document.getElementById('schedule-body');
-  body.innerHTML = '<div class="schedule-loading">⏳ Memuat jadwal...</div>';
-
-  const courtsRes = await apiCall('/courts.php');
-  if (!courtsRes.success) {
-    body.innerHTML = '<div class="schedule-loading">❌ Gagal memuat data lapangan</div>';
-    return;
-  }
-
-  // Load jadwal untuk semua lapangan sekaligus
-  const promises = courtsRes.data.map(c => apiCall(`/schedules.php?court_id=${c.court_id}&date=${currentScheduleDate}`));
-  const results  = await Promise.all(promises);
-
-  // Kumpulkan semua timeslot unik
-  const allTimes = {};
-  results.forEach(r => {
-    if (r.success) r.data.forEach(s => { allTimes[s.start_time] = s.start_time; });
-  });
-  const sortedTimes = Object.keys(allTimes).sort();
-
-  if (!sortedTimes.length) {
-    body.innerHTML = '<div class="schedule-loading">📅 Tidak ada jadwal tersedia untuk tanggal ini</div>';
-    return;
-  }
-
-  const session = getSession();
-  let html = '';
-  body.style.display = 'grid';
-  body.style.gridTemplateColumns = 'var(--sched-col, 100px 1fr 1fr 1fr 1fr)';
-  body.style.minWidth = 'var(--sched-min, unset)';
-
-  sortedTimes.forEach(time => {
-    html += `<div style="display:contents">`;
-    html += `<div class="time-label">${time.slice(0,5)}</div>`;
-
-    results.forEach((res, courtIdx) => {
-      if (!res.success) { html += `<div class="slot-cell"></div>`; return; }
-      const slot = res.data.find(s => s.start_time === time);
-
-      if (!slot) {
-        html += `<div class="slot-cell" style="background:rgba(0,0,0,0.02);"></div>`;
-        return;
-      }
-
-      let cls, label, clickAttr = '';
-      if (slot.availability === 'booked') {
-        cls = 'slot-booked'; label = 'Dipesan';
-      } else {
-        cls = 'slot-available';
-        label = 'Tersedia';
-        const cid = courtsRes.data[courtIdx].court_id;
-        clickAttr = `onclick="bookFromSchedule(${cid},'${time.slice(0,5)}')"`;
-      }
-
-      html += `<div class="slot-cell ${cls}" ${clickAttr}><span class="slot-pill">${label}</span></div>`;
-    });
-    html += `</div>`;
-  });
-
-  body.innerHTML = html;
-}
-
-// ═══════════════════════════════════════════════════════════
-// BOOKING
-// ═══════════════════════════════════════════════════════════
-
-let selectedSlots   = []; // array of { schedule_id, start_time, price }
-let scheduleByTime  = {}; // { 'HH:MM' : { schedule_id, price } }
-
-async function loadCourtsForBooking() {
-  const res = await apiCall('/courts.php');
-  if (!res.success) return;
-  const sel = document.getElementById('book-court');
-  sel.innerHTML = '<option value="">— Pilih Lapangan —</option>';
-  res.data.forEach(c => {
-    sel.innerHTML += `<option value="${c.court_id}">${c.nama_lapangan}</option>`;
-  });
-}
-
-async function onCourtOrDateChange() {
-  updateSummary();
-  const courtId = document.getElementById('book-court').value;
-  const date    = document.getElementById('book-date').value;
-  if (!courtId || !date) return;
-
-  const slotsContainer = document.getElementById('time-slots');
-  slotsContainer.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--text-light);">⏳ Memuat slot...</div>';
-  selectedSlots  = [];
-  scheduleByTime = {};
-  updateSummary();
-
-  const res = await apiCall(`/schedules.php?court_id=${courtId}&date=${date}`);
-  if (!res.success || !res.data.length) {
-    slotsContainer.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--text-light);">Tidak ada jadwal untuk pilihan ini</div>';
-    return;
-  }
-
-  res.data.forEach(s => {
-    scheduleByTime[s.start_time.slice(0,5)] = { schedule_id: s.schedule_id, price: s.price };
-  });
-
-  slotsContainer.innerHTML = res.data.map(s => {
-    const time = s.start_time.slice(0,5);
-    const taken = s.availability === 'booked';
-    return `<div class="time-slot-btn ${taken ? 'taken' : ''}" 
-      data-time="${time}" data-price="${s.price}" data-sid="${s.schedule_id}"
-      onclick="toggleSlot(this,'${time}',${s.price},${s.schedule_id})">
-      ${time}<br><span style="font-size:10px;opacity:0.7;">Rp ${(s.price/1000).toFixed(0)}k</span>
-    </div>`;
-  }).join('');
-}
-
-function toggleSlot(el, time, price, scheduleId) {
-  if (el.classList.contains('taken')) return;
-  if (el.classList.contains('selected')) {
-    el.classList.remove('selected');
-    selectedSlots = selectedSlots.filter(s => s.start_time !== time);
-  } else {
-    el.classList.add('selected');
-    selectedSlots.push({ schedule_id: scheduleId, start_time: time, price });
-    selectedSlots.sort((a,b) => a.start_time.localeCompare(b.start_time));
-  }
-  updateSummary();
-}
-
-function updateSummary() {
-  const name    = document.getElementById('book-name')?.value || '—';
-  const courtEl = document.getElementById('book-court');
-  const court   = courtEl?.options[courtEl.selectedIndex]?.text || '—';
-  const date    = document.getElementById('book-date')?.value;
-
-  document.getElementById('sum-name').textContent  = name || '—';
-  document.getElementById('sum-court').textContent = courtEl?.value ? court : '—';
-  document.getElementById('sum-date').textContent  = date ? formatDate(date) : '—';
-  document.getElementById('sum-time').textContent  = selectedSlots.length ? selectedSlots.map(s => s.start_time).join(', ') : '—';
-  document.getElementById('sum-dur').textContent   = selectedSlots.length ? selectedSlots.length + ' jam' : '—';
-  // Pembayaran selalu QRIS
-  document.getElementById('sum-pay').textContent   = 'QRIS';
-
-  const total = selectedSlots.reduce((sum, s) => sum + s.price, 0);
-  document.getElementById('sum-total').textContent = total > 0 ? 'Rp ' + total.toLocaleString('id-ID') : 'Rp 0';
-}
-
-function formatDate(d) {
-  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  const dt = new Date(d + 'T00:00:00'); // fix timezone
-  return `${days[dt.getDay()]}, ${dt.getDate()} ${months[dt.getMonth()]} ${dt.getFullYear()}`;
-}
-
-function autofillBooking() {
-  const user = getSession();
-  if (!user) return;
-  const nameEl  = document.getElementById('book-name');
-  const phoneEl = document.getElementById('book-phone');
-  if (nameEl)  nameEl.value  = user.nama_lengkap || '';
-  if (phoneEl) phoneEl.value = user.nomor_handphone || '';
-  updateSummary();
-}
-
-function refreshBookingGate() {
-  const loggedIn = !!getSession();
-  document.getElementById('booking-auth-gate').classList.toggle('show', !loggedIn);
-  document.getElementById('booking-content').style.display = loggedIn ? 'block' : 'none';
-  if (loggedIn) {
-    autofillBooking();
-    loadCourtsForBooking();
-    loadMyBookings();
-    const dateEl = document.getElementById('book-date');
-    if (dateEl && !dateEl.value) {
-      dateEl.value = new Date().toISOString().split('T')[0];
-    }
-  }
-}
-
-// ─── QRIS Payment State ─────────────────────────────────────
-let qrisBookingData = null;   // { items, total, bookingId }
-let qrisTimerInterval = null;
-const QRIS_TIMEOUT_SEC = 300; // 5 menit
-
-async function submitBooking() {
-  const name    = document.getElementById('book-name').value.trim();
-  const courtId = document.getElementById('book-court').value;
-  const date    = document.getElementById('book-date').value;
-
-  if (!name)             { showToast('⚠️ Harap isi nama lengkap!', true); return; }
-  if (!courtId)          { showToast('⚠️ Harap pilih lapangan!', true); return; }
-  if (!date)             { showToast('⚠️ Harap pilih tanggal!', true); return; }
-  if (!selectedSlots.length) { showToast('⚠️ Harap pilih minimal 1 jam!', true); return; }
-
-  const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:white;margin:0 auto;"></div>';
-
-  const items = selectedSlots.map(s => ({ schedule_id: s.schedule_id, play_date: date }));
-  const totalPrice = selectedSlots.reduce((sum, s) => sum + (s.price || 0), 0);
-
-  // Simpan data booking untuk dikirim setelah user konfirmasi QRIS
-  qrisBookingData = { items, totalPrice, courtId, date };
-
-  btn.disabled = false;
-  btn.innerHTML = '⚡ KONFIRMASI BOOKING';
-
-  // Tampilkan QRIS modal
-  openQrisModal(totalPrice);
-}
-
-function openQrisModal(totalPrice) {
-  const overlay = document.getElementById('qris-overlay');
-  document.getElementById('qris-success').style.display = 'none';
-  overlay.querySelector('.qris-body').style.display = '';
-  overlay.querySelector('.qris-footer').style.display = '';
-  overlay.querySelector('.qris-header').style.display = '';
-
-  document.getElementById('qris-amount').textContent = 'Rp ' + totalPrice.toLocaleString('id-ID');
-  document.getElementById('qris-booking-ref').textContent = 'Menunggu konfirmasi pembayaran…';
-
-  // Generate QR Code (pakai data statis merchant QRIS MoSe)
-  const qrData = `MOSE-QRIS-${Date.now()}-${totalPrice}`;
-  renderQrisQR(qrData, totalPrice);
-
-  overlay.classList.add('show');
-  document.body.style.overflow = 'hidden';
-
-  startQrisTimer();
-}
-
-function renderQrisQR(data, amount) {
-  const container = document.getElementById('qris-qr-inner');
-  // Render QR menggunakan Google Charts API (atau fallback pola visual)
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data)}&margin=10&bgcolor=ffffff&color=0d2240&format=png&qzone=1`;
-  container.innerHTML = `
-    <div style="background:#fff;padding:12px;border-radius:12px;display:inline-block;box-shadow:0 4px 20px rgba(0,0,0,0.12);">
-      <img src="${qrUrl}" width="180" height="180" alt="QRIS MoSe"
-           onerror="this.parentElement.innerHTML=getFallbackQR(${amount})"
-           style="display:block;border-radius:4px;">
-    </div>
-    <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:1px;">MoSe · NMID: ID102410125567891</div>
-  `;
-}
-
-function getFallbackQR(amount) {
-  // Fallback QR visual jika API tidak tersedia
-  return `<div style="width:180px;height:180px;background:#fff;border-radius:8px;display:grid;place-items:center;padding:16px;">
-    <div style="font-size:48px;">⬛</div>
-    <div style="font-size:11px;color:#0d2240;text-align:center;font-weight:600;margin-top:4px;">Rp ${amount.toLocaleString('id-ID')}</div>
-  </div>`;
-}
-
-function startQrisTimer() {
-  clearInterval(qrisTimerInterval);
-  let remaining = QRIS_TIMEOUT_SEC;
-  const textEl   = document.getElementById('qris-timer-text');
-  const circleEl = document.getElementById('qris-timer-circle');
-  const circumference = 113; // 2 * π * 18
-
-  function tick() {
-    const m = String(Math.floor(remaining / 60)).padStart(2, '0');
-    const s = String(remaining % 60).padStart(2, '0');
-    textEl.textContent = `${m}:${s}`;
-
-    const progress = remaining / QRIS_TIMEOUT_SEC;
-    circleEl.style.strokeDashoffset = circumference * (1 - progress);
-
-    // Warna merah saat < 1 menit
-    circleEl.style.stroke = remaining < 60 ? '#ff6b6b' : '#13c98e';
-    textEl.style.color    = remaining < 60 ? '#ff6b6b' : 'var(--teal)';
-
-    if (remaining <= 0) {
-      clearInterval(qrisTimerInterval);
-      onQrisExpired();
-      return;
-    }
-    remaining--;
-  }
-  tick();
-  qrisTimerInterval = setInterval(tick, 1000);
-}
-
-function onQrisExpired() {
-  showToast('⏰ Waktu pembayaran habis. Silakan coba lagi.', true);
-  closeQrisModal();
-}
-
-function cancelQrisPayment() {
-  clearInterval(qrisTimerInterval);
-  closeQrisModal();
-  showToast('❌ Pembayaran dibatalkan.', true);
-}
-
-async function confirmQrisPayment() {
-  if (!qrisBookingData) return;
-
-  const btn = document.getElementById('qris-confirm-btn');
-  btn.disabled = true;
-  document.getElementById('qris-confirm-content').innerHTML =
-    '<div class="spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:white;width:18px;height:18px;margin:0 auto;"></div>';
-
-  clearInterval(qrisTimerInterval);
-
-  // Kirim booking ke API (status akan langsung confirmed + payment verified)
-  const res = await apiCall('/bookings.php', {
-    method: 'POST',
-    body: JSON.stringify({ items: qrisBookingData.items, payment_method: 'qris' })
-  });
-
-  btn.disabled = false;
-  document.getElementById('qris-confirm-content').textContent = '✅ Saya Sudah Bayar';
-
-  if (!res.success) {
-    showToast('❌ ' + res.message, true);
-    closeQrisModal();
-    return;
-  }
-
-  // Tampilkan success state di dalam modal
-  showQrisSuccess(res);
-}
-
-function showQrisSuccess(res) {
-  document.getElementById('qris-overlay').querySelector('.qris-body').style.display = 'none';
-  document.getElementById('qris-overlay').querySelector('.qris-footer').style.display = 'none';
-  document.getElementById('qris-overlay').querySelector('.qris-header').style.display = 'none';
-
-  document.getElementById('qris-booking-ref').textContent = `Booking #${res.booking_id}`;
-  document.getElementById('qris-success-desc').textContent =
-    `Booking #${res.booking_id} · Rp ${res.total_price?.toLocaleString('id-ID')} · Pembayaran QRIS Terverifikasi ✓`;
-  document.getElementById('qris-success').style.display = 'flex';
-}
-
-function closeQrisModal() {
-  clearInterval(qrisTimerInterval);
-  const overlay = document.getElementById('qris-overlay');
-  overlay.classList.remove('show');
-  document.body.style.overflow = '';
-  qrisBookingData = null;
-
-  // Reset form
-  selectedSlots = [];
-  document.getElementById('book-court').value = '';
-  document.getElementById('book-date').value  = new Date().toISOString().split('T')[0];
-  document.getElementById('book-note').value  = '';
-  document.getElementById('time-slots').innerHTML =
-    '<div style="grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--text-light);">Pilih lapangan dan tanggal terlebih dahulu</div>';
-  autofillBooking();
-  updateSummary();
-  loadMyBookings();
-}
-
-function prefillBooking(courtId) {
-  showSection('booking');
-  setTimeout(() => {
-    const sel = document.getElementById('book-court');
-    if (sel) {
-      sel.value = courtId;
-      onCourtOrDateChange();
-    }
-  }, 200);
-}
-
-function bookFromSchedule(courtId, time) {
-  showSection('booking');
-  setTimeout(() => {
-    const sel = document.getElementById('book-court');
-    const dateEl = document.getElementById('book-date');
-    if (sel) sel.value = courtId;
-    if (dateEl) dateEl.value = currentScheduleDate;
-    onCourtOrDateChange().then(() => {
-      setTimeout(() => {
-        const btn = document.querySelector(`[data-time="${time}"]`);
-        if (btn && !btn.classList.contains('taken')) {
-          btn.click();
-        }
-      }, 300);
-    });
-  }, 200);
-}
-
-// ═══════════════════════════════════════════════════════════
-// PROFILE
-// ═══════════════════════════════════════════════════════════
-
-let avatarFile = null; // File yang dipilih untuk diupload
-
-// ─── Load & tampilkan data profil ────────────────────────────
-async function loadProfilePage() {
-  const user = getSession();
-  if (!user) return;
-
-  // Isi dari sesi dulu (instan)
-  renderProfileUI(user);
-
-  // Refresh dari server
-  const res = await apiCall('/users.php');
-  if (res.success && res.data) {
-    // Update sesi dengan data terbaru
-    const updated = { ...user, ...res.data };
-    saveSession(updated);
-    renderProfileUI(updated);
-  }
-}
-
-function renderProfileUI(user) {
-  // Avatar display
-  const avatarEl = document.getElementById('profile-avatar-display');
-  if (user.foto_profil) {
-    const baseUrl = BASE_URL.replace('/api', '');
-    avatarEl.innerHTML = `<img src="${baseUrl}/${user.foto_profil}" alt="Foto" style="width:96px;height:96px;border-radius:50%;object-fit:cover;" onerror="this.parentElement.innerHTML=initials_of('${user.nama_lengkap}')">`;
-    avatarEl.classList.add('has-photo');
-  } else {
-    const initials = user.nama_lengkap.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
-    avatarEl.textContent = initials;
-    avatarEl.classList.remove('has-photo');
-    avatarEl.style.display = 'flex';
-  }
-
-  // Info
-  document.getElementById('profile-display-name').textContent  = user.nama_lengkap || '—';
-  document.getElementById('profile-display-email').textContent = user.email || '—';
-  document.getElementById('profile-nama').value  = user.nama_lengkap || '';
-  document.getElementById('profile-phone').value = user.nomor_handphone || '';
-  document.getElementById('profile-email').value = user.email || '';
-}
-
-// ─── Simpan nama lengkap ──────────────────────────────────────
-async function saveProfileInfo() {
-  const nama = document.getElementById('profile-nama').value.trim();
-  const alertEl = document.getElementById('profile-info-alert');
-  alertEl.className = 'profile-alert';
-  alertEl.style.display = 'none';
-
-  if (nama.length < 2) {
-    showProfileAlert('profile-info-alert', 'Nama lengkap minimal 2 karakter', 'error');
-    return;
-  }
-
-  const btn = document.getElementById('profile-save-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Menyimpan...';
-
-  const res = await apiCall('/users.php', {
-    method: 'PUT',
-    body: JSON.stringify({ nama_lengkap: nama })
-  });
-
-  btn.disabled = false;
-  btn.innerHTML = '💾 Simpan Perubahan';
-
-  if (!res.success) {
-    showProfileAlert('profile-info-alert', '❌ ' + res.message, 'error');
-    return;
-  }
-
-  // Update sesi lokal
-  const session = getSession();
-  const updated = { ...session, nama_lengkap: nama, ...(res.data || {}) };
-  saveSession(updated);
-  updateNavUser();
-  renderProfileUI(updated);
-  showProfileAlert('profile-info-alert', '✅ Profil berhasil diperbarui!', 'success');
-}
-
-// ─── Ganti password ───────────────────────────────────────────
-async function saveProfilePassword() {
-  const oldPw  = document.getElementById('profile-old-pw').value;
-  const newPw  = document.getElementById('profile-new-pw').value;
-  const newPw2 = document.getElementById('profile-new-pw2').value;
-
-  if (!oldPw || !newPw || !newPw2) {
-    showProfileAlert('profile-pw-alert', '❌ Semua field password wajib diisi', 'error');
-    return;
-  }
-  if (newPw.length < 6) {
-    showProfileAlert('profile-pw-alert', '❌ Password baru minimal 6 karakter', 'error');
-    return;
-  }
-  if (newPw !== newPw2) {
-    showProfileAlert('profile-pw-alert', '❌ Konfirmasi password tidak cocok', 'error');
-    return;
-  }
-
-  const btn = document.getElementById('profile-pw-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> Memproses...';
-
-  const res = await apiCall('/users.php?action=password', {
-    method: 'PUT',
-    body: JSON.stringify({ old_password: oldPw, new_password: newPw })
-  });
-
-  btn.disabled = false;
-  btn.innerHTML = '🔑 Ganti Password';
-
-  if (!res.success) {
-    showProfileAlert('profile-pw-alert', '❌ ' + res.message, 'error');
-    return;
-  }
-
-  document.getElementById('profile-old-pw').value  = '';
-  document.getElementById('profile-new-pw').value  = '';
-  document.getElementById('profile-new-pw2').value = '';
-  showProfileAlert('profile-pw-alert', '✅ Password berhasil diubah!', 'success');
-}
-
-// ─── Helpers profil ───────────────────────────────────────────
-function showProfileAlert(id, msg, type) {
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.className = 'profile-alert ' + type + ' show';
-  setTimeout(() => { el.classList.remove('show'); }, 4000);
-}
-
-function toggleProfilePw(inputId, btn) {
-  const inp = document.getElementById(inputId);
-  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
-  else { inp.type = 'password'; btn.textContent = '👁'; }
-}
-
-// ─── Avatar Modal ─────────────────────────────────────────────
-function openAvatarModal() {
-  avatarFile = null;
-  document.getElementById('avatar-file-input').value = '';
-  document.getElementById('avatar-preview-wrap').classList.remove('show');
-  document.getElementById('avatar-confirm-btn').disabled = true;
-  document.getElementById('avatar-drop-zone').style.display = '';
-  document.getElementById('avatar-upload-overlay').classList.add('visible');
-}
-
-function closeAvatarModal() {
-  document.getElementById('avatar-upload-overlay').classList.remove('visible');
-  avatarFile = null;
-}
-
-function avatarDragOver(e) {
-  e.preventDefault();
-  document.getElementById('avatar-drop-zone').classList.add('drag-over');
-}
-function avatarDragLeave(e) {
-  document.getElementById('avatar-drop-zone').classList.remove('drag-over');
-}
-function avatarDrop(e) {
-  e.preventDefault();
-  document.getElementById('avatar-drop-zone').classList.remove('drag-over');
-  const file = e.dataTransfer.files[0];
-  if (file) avatarFileSelected(file);
-}
-
-function avatarFileSelected(file) {
-  if (!file) return;
-  const allowed = ['image/jpeg','image/png','image/webp','image/gif'];
-  if (!allowed.includes(file.type)) {
-    showToast('❌ Format file harus JPG, PNG, WebP, atau GIF', true);
-    return;
-  }
-  if (file.size > 2 * 1024 * 1024) {
-    showToast('❌ Ukuran file maksimal 2 MB', true);
-    return;
-  }
-
-  avatarFile = file;
-  const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById('avatar-preview-img').src = e.target.result;
-    document.getElementById('avatar-preview-name').textContent = file.name + ' · ' + (file.size / 1024).toFixed(0) + ' KB';
-    document.getElementById('avatar-preview-wrap').classList.add('show');
-    document.getElementById('avatar-drop-zone').style.display = 'none';
-    document.getElementById('avatar-confirm-btn').disabled = false;
-  };
-  reader.readAsDataURL(file);
-}
-
-async function uploadAvatar() {
-    if (!avatarFile) return;
-
-    const btn = document.getElementById('avatar-confirm-btn');
-    btn.disabled = true;
-    btn.innerHTML = '<div class="spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:white;"></div>';
-
-    const session = getSession();
-    const formData = new FormData();
-    formData.append('foto', avatarFile);
-
-    try {
-        // Token dikirim via URL, bukan header
-        const url = BASE_URL + '/users.php?action=avatar&token=' + encodeURIComponent(session.token);
-        const res = await fetch(url, {
-            method: 'POST',
-            body: formData
-        });
-        const data = await res.json();
-
-        if (!data.success) {
-            showToast('❌ ' + data.message, true);
-            btn.disabled = false;
-            btn.innerHTML = '⬆️ Upload';
-            return;
-        }
-
-        const updated = { ...session, foto_profil: data.foto_profil };
-        saveSession(updated);
-        closeAvatarModal();
-        renderProfileUI(updated);
-        updateNavUser();
-        showToast('✅ Foto profil berhasil diperbarui!');
-
-    } catch(e) {
-        showToast('❌ Gagal menghubungi server', true);
-        btn.disabled = false;
-        btn.innerHTML = '⬆️ Upload';
-    }
-}
-
-// Tutup modal avatar saat klik di luar
-document.getElementById('avatar-upload-overlay')?.addEventListener('click', function(e) {
-  if (e.target === this) closeAvatarModal();
-});
-
-// ─── Riwayat Booking User ─────────────────────────────────
-
-async function loadMyBookings() {
-  if (!getSession()) return;
-  const list = document.getElementById('my-bookings-list');
-  const res  = await apiCall('/bookings.php');
-
-  if (!res.success || !res.data.length) {
-    list.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.3);text-align:center;padding:1rem;">Belum ada booking</div>';
-    return;
-  }
-
-  list.innerHTML = res.data.slice(0,5).map(b => `
-    <div class="my-booking-card">
-      <div class="bk-header">
-        <div class="bk-court">Booking #${b.booking_id}</div>
-        <span class="bk-status ${b.status}">${b.status === 'confirmed' ? '✅ Confirmed' : b.status === 'cancelled' ? '❌ Dibatalkan' : b.status}</span>
-      </div>
-      <div class="bk-info">
-        📅 ${b.booking_date} · Rp ${parseInt(b.total_price).toLocaleString('id-ID')}
-        <br>⬛ QRIS · 
-        <span style="color:${b.payment_status === 'verified' ? '#13c98e' : b.payment_status === 'failed' ? '#ff8080' : '#ffa500'}">
-          ${b.payment_status === 'verified' ? '✓ Terverifikasi' : b.payment_status === 'failed' ? '✗ Gagal' : b.payment_status || 'pending'}
-        </span>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ─── Date picker manual ────────────────────────────────────
-document.getElementById('schedule-date-picker')?.addEventListener('change', function() {
-  setScheduleDate(this.value, null);
-  document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
-});
-
-// ─── Mobile Hamburger Menu ─────────────────────────────
-function toggleMenu() {
-  const links = document.getElementById('nav-links');
-  const btn   = document.getElementById('nav-hamburger');
-  links.classList.toggle('open');
-  btn.classList.toggle('open');
-}
-function closeMenu() {
-  document.getElementById('nav-links').classList.remove('open');
-  document.getElementById('nav-hamburger').classList.remove('open');
-}
-// Close menu when clicking outside
-document.addEventListener('click', function(e) {
-  const nav = document.querySelector('nav');
-  if (!nav.contains(e.target)) closeMenu();
-});
-
-// ═══════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════
-
-(function init() {
-  updateNavUser();
-  loadHeroPreview();
-
-  // Jika sudah login (token masih tersimpan), langsung load data
-  if (getSession()) {
-    loadCourtsForBooking();
-  } else {
-    setTimeout(() => openAuthOverlay('login'), 400);
-  }
-})();
-</script>
+    <script src="js/app.js"></script>
 </body>
+
 </html>
