@@ -1,0 +1,49 @@
+<section id="schedule" class="section">
+    <div class="schedule-wrap">
+        <div class="container">
+            <div class="schedule-header">
+                <div>
+                    <h1>JADWAL LAPANGAN</h1>
+                    <p style="color:rgba(255,255,255,0.55);font-size:14px;margin-top:4px;">Klik slot tersedia untuk
+                        langsung booking</p>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+                    <input type="date" id="schedule-date-picker" class="form-input"
+                        style="width:180px;background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2);color:white;padding:8px 12px;font-size:13px;">
+                    <div class="date-selector" id="date-selector-btns"></div>
+                </div>
+            </div>
+
+            <div class="schedule-grid-wrapper">
+                <div class="schedule-grid">
+                    <div class="grid-header">Waktu</div>
+                    <div class="grid-header">🏸 Lapangan A</div>
+                    <div class="grid-header">🏸 Lapangan B</div>
+                    <div class="grid-header">🏸 Lapangan C</div>
+                    <div class="grid-header">🏸 Lapangan D</div>
+                </div>
+                <div id="schedule-body">
+                    <div class="schedule-loading">⏳ Memuat jadwal...</div>
+                </div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-dot"
+                        style="background:rgba(19,201,142,0.3);border:1.5px solid rgba(19,201,142,0.6);"></div>Tersedia
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot"
+                        style="background:rgba(26,95,168,0.15);border:1.5px dashed rgba(26,95,168,0.4);"></div>Sudah
+                    Dipesan
+                </div>
+                <div class="legend-item">
+                    <div class="legend-dot"
+                        style="background:rgba(255,165,0,0.2);border:1.5px solid rgba(255,165,0,0.5);"></div>Booking
+                    Saya
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>Dibuat oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
+</section>
