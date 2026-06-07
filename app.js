@@ -4,15 +4,20 @@
 const BASE_URL = "http://localhost/mose/api"; // Ganti sesuai server XAMPP Anda
 
 // ─── Section Loader ──────────────────────────────────────────
-// Memuat file HTML tiap section lalu inject ke dalam #sections-container
+// Deteksi base path otomatis: bekerja di Vercel (root) maupun XAMPP (subfolder)
+function getBasePath() {
+    const path = window.location.pathname; // misal: /mose/ atau /
+    return path.substring(0, path.lastIndexOf("/") + 1);
+}
+
 async function loadSections() {
     const container = document.getElementById("sections-container");
     const sections = ["home", "schedule", "courts", "booking", "profile"];
+    const base = getBasePath();
 
     for (const name of sections) {
         try {
-            // Pakai path absolut agar bekerja di Vercel maupun localhost
-            const res = await fetch("/" + name + ".html");
+            const res = await fetch(base + name + ".html");
             if (!res.ok) throw new Error("HTTP " + res.status);
             const html = await res.text();
             container.insertAdjacentHTML("beforeend", html);
@@ -21,7 +26,6 @@ async function loadSections() {
         }
     }
 
-    // Setelah semua section dimuat, jalankan inisialisasi
     bindDynamicEvents();
     init();
 }
