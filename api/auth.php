@@ -1,13 +1,13 @@
 <?php
-// ============================================================
+
 // api/auth.php  →  POST /api/auth.php?action=register|login
-// ============================================================
+
 require_once '../config/database.php';
 
 $action = $_GET['action'] ?? '';
 $body   = json_decode(file_get_contents('php://input'), true) ?? [];
 
-// ─── REGISTER ────────────────────────────────────────────────
+//        REGISTER 
 if ($action === 'register') {
     $required = ['nama_lengkap', 'nomor_handphone', 'email', 'password'];
     foreach ($required as $f) {
@@ -34,7 +34,7 @@ if ($action === 'register') {
     jsonResponse(['success' => true, 'message' => 'Registrasi berhasil', 'user_id' => $conn->insert_id], 201);
 }
 
-// ─── LOGIN ────────────────────────────────────────────────────
+//        LOGIN 
 if ($action === 'login') {
     if (empty($body['email']) || empty($body['password'])) {
         jsonResponse(['success' => false, 'message' => 'Email dan password wajib diisi'], 400);
