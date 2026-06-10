@@ -1,15 +1,369 @@
-<section id="courts" class="section">
-    <div class="courts-wrap">
-        <div class="container">
-            <div class="section-label">FASILITAS KAMI</div>
-            <h2 class="section-title">PILIH LAPANGANMU</h2>
-            <p class="section-desc">Empat lapangan berkualitas siap melayanimu, mulai dari latihan ringan hingga
-                turnamen internal.</p>
-            <div class="courts-grid" id="courts-grid">
-                <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">⏳ Memuat data
-                    lapangan...</div>
-            </div>
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Court — MoSe</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="Mose.css" />
+  </head>
+  <body>
+    <!--  AUTH OVERLAY  -->
+    <div class="auth-overlay" id="auth-overlay">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <div class="auth-logo-icon"></div>
+          <div class="auth-logo-text">Mo<span>Se</span></div>
         </div>
+        <div class="auth-tabs">
+          <button
+            class="auth-tab active"
+            id="tab-login"
+            onclick="switchAuthTab('login')"
+          >
+            Masuk
+          </button>
+          <button
+            class="auth-tab"
+            id="tab-register"
+            onclick="switchAuthTab('register')"
+          >
+            Daftar
+          </button>
+        </div>
+        <!-- LOGIN -->
+        <div class="auth-panel active" id="panel-login">
+          <div class="auth-title">SELAMAT DATANG</div>
+          <div class="auth-subtitle">Masuk ke akun MoSe Anda</div>
+          <div class="auth-alert" id="login-alert"></div>
+          <div class="auth-form-group">
+            <label class="auth-label">Email</label>
+            <input
+              class="auth-input"
+              id="login-email"
+              type="email"
+              placeholder="contoh@email.com"
+              autocomplete="email"
+            />
+            <div class="auth-error" id="login-email-err">
+              Format email tidak valid
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label">Password</label>
+            <div class="auth-input-wrap">
+              <input
+                class="auth-input"
+                id="login-pw"
+                type="password"
+                placeholder="Masukkan password"
+                autocomplete="current-password"
+              />
+              <button
+                class="toggle-pw"
+                onclick="togglePw('login-pw', this)"
+                tabindex="-1"
+              ><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+            <div class="auth-error" id="login-pw-err">
+              Password tidak boleh kosong
+            </div>
+          </div>
+          <button class="auth-btn" id="login-btn" onclick="doLogin()">
+            🔑 Masuk
+          </button>
+          <div class="auth-divider">
+            Belum punya akun?
+            <span onclick="switchAuthTab('register')">Daftar sekarang</span>
+          </div>
+        </div>
+        <!-- REGISTER -->
+        <div class="auth-panel" id="panel-register">
+          <div class="auth-title">BUAT AKUN</div>
+          <div class="auth-subtitle">Daftar dan mulai booking lapangan</div>
+          <div class="auth-alert" id="reg-alert"></div>
+          <div class="auth-form-group">
+            <label class="auth-label">Nama Lengkap</label>
+            <input
+              class="auth-input"
+              id="reg-name"
+              type="text"
+              placeholder="Nama lengkap Anda"
+              autocomplete="name"
+            />
+            <div class="auth-error" id="reg-name-err">
+              Nama minimal 2 karakter
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label">Email</label>
+            <input
+              class="auth-input"
+              id="reg-email"
+              type="email"
+              placeholder="contoh@email.com"
+              autocomplete="email"
+            />
+            <div class="auth-error" id="reg-email-err">
+              Format email tidak valid
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label">Nomor WhatsApp</label>
+            <input
+              class="auth-input"
+              id="reg-phone"
+              type="tel"
+              placeholder="08123456789"
+              autocomplete="tel"
+            />
+            <div class="auth-error" id="reg-phone-err">
+              Nomor WA minimal 10 digit
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label">Password</label>
+            <div class="auth-input-wrap">
+              <input
+                class="auth-input"
+                id="reg-pw"
+                type="password"
+                placeholder="Minimal 6 karakter"
+                autocomplete="new-password"
+              />
+              <button
+                class="toggle-pw"
+                onclick="togglePw('reg-pw', this)"
+                tabindex="-1"
+              ><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+            <div class="auth-error" id="reg-pw-err">
+              Password minimal 6 karakter
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label">Konfirmasi Password</label>
+            <div class="auth-input-wrap">
+              <input
+                class="auth-input"
+                id="reg-pw2"
+                type="password"
+                placeholder="Ulangi password"
+                autocomplete="new-password"
+              />
+              <button
+                class="toggle-pw"
+                onclick="togglePw('reg-pw2', this)"
+                tabindex="-1"
+              ><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+            <div class="auth-error" id="reg-pw2-err">Password tidak cocok</div>
+          </div>
+          <button class="auth-btn" id="reg-btn" onclick="doRegister()">
+            ✨ Buat Akun
+          </button>
+          <div class="auth-divider">
+            Sudah punya akun?
+            <span onclick="switchAuthTab('login')">Masuk di sini</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <footer>Dibuat dengan ❤️ oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
-</section>
+    <!--  NAVBAR  -->
+    <nav>
+      <div class="nav-brand">
+        <div class="nav-logo-icon">
+          <img
+            src="logo.png"
+            alt="MoSe"
+            style="border-radius: 50%"
+            width="40"
+            height="40"
+          />
+        </div>
+        <div class="nav-brand-text">Mo<span>Se</span></div>
+      </div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" id="nav-home">Home</a></li>
+        <li><a href="schedule.html" id="nav-schedule">Jadwal</a></li>
+        <li><a href="courts.html" id="nav-courts" class="active">Court</a></li>
+        <li>
+          <a href="booking.html" id="nav-booking" class="nav-cta">Booking</a>
+        </li>
+        <li>
+          <a href="profile.html" id="nav-profile" style="display: none"
+            >👤 Profil</a
+          >
+        </li>
+      </ul>
+      <div id="nav-user-area"></div>
+      <button
+        class="nav-hamburger"
+        id="nav-hamburger"
+        onclick="toggleMenu()"
+        aria-label="Menu"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <section
+      id="courts"
+      class="section active"
+      style="display: block; padding-top: 68px"
+    >
+      <div class="courts-wrap">
+        <div class="container">
+          <div class="section-label">FASILITAS KAMI</div>
+          <h2 class="section-title">PILIH LAPANGANMU</h2>
+          <p class="section-desc">
+            Empat lapangan berkualitas siap melayanimu, mulai dari latihan
+            ringan hingga turnamen internal.
+          </p>
+          <div class="courts-grid" id="courts-grid">
+            <div
+              style="
+                grid-column: 1/-1;
+                text-align: center;
+                padding: 3rem;
+                color: var(--text-light);
+              "
+            >
+              ❳ Memuat data lapangan...
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer>
+        Dibuat oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah
+        Itu.
+      </footer>
+    </section>
+
+    <!--  QRIS MODAL  -->
+    <div class="qris-overlay" id="qris-overlay">
+      <div class="qris-card">
+        <div class="qris-header">
+          <div class="qris-header-left">
+            <div class="qris-logo-icon">⬛</div>
+            <div>
+              <div class="qris-title">PEMBAYARAN QRIS</div>
+              <div class="qris-subtitle" id="qris-booking-ref">
+                Menunggu konfirmasi…
+              </div>
+            </div>
+          </div>
+          <div class="qris-timer-wrap">
+            <svg class="qris-timer-ring" viewBox="0 0 44 44">
+              <circle
+                cx="22"
+                cy="22"
+                r="18"
+                fill="none"
+                stroke="rgba(255,255,255,0.08)"
+                stroke-width="3"
+              />
+              <circle
+                id="qris-timer-circle"
+                cx="22"
+                cy="22"
+                r="18"
+                fill="none"
+                stroke="#13c98e"
+                stroke-width="3"
+                stroke-dasharray="113"
+                stroke-dashoffset="0"
+                stroke-linecap="round"
+                transform="rotate(-90 22 22)"
+                style="
+                  transition:
+                    stroke-dashoffset 1s linear,
+                    stroke 0.3s;
+                "
+              />
+            </svg>
+            <span class="qris-timer-text" id="qris-timer-text">05:00</span>
+          </div>
+        </div>
+        <div class="qris-body">
+          <div class="qris-amount-box">
+            <div class="qris-amount-label">Total Pembayaran</div>
+            <div class="qris-amount-val" id="qris-amount">Rp 0</div>
+          </div>
+          <div class="qris-qr-wrap">
+            <div class="qris-qr-inner" id="qris-qr-inner"></div>
+            <div class="qris-scan-hint">
+              Scan QR di atas dengan aplikasi e-wallet Anda
+            </div>
+            <div class="qris-wallets">
+              <span class="wallet-badge">GoPay</span
+              ><span class="wallet-badge">OVO</span>
+              <span class="wallet-badge">Dana</span
+              ><span class="wallet-badge">ShopeePay</span>
+              <span class="wallet-badge">LinkAja</span
+              ><span class="wallet-badge">+ lainnya</span>
+            </div>
+          </div>
+          <div class="qris-steps">
+            <div class="qris-step">
+              <div class="qris-step-num">1</div>
+              <div class="qris-step-txt">
+                Buka aplikasi <strong>e-wallet</strong> Anda
+              </div>
+            </div>
+            <div class="qris-step">
+              <div class="qris-step-num">2</div>
+              <div class="qris-step-txt">
+                Pilih menu <strong>Scan QR / QRIS</strong>
+              </div>
+            </div>
+            <div class="qris-step">
+              <div class="qris-step-num">3</div>
+              <div class="qris-step-txt">
+                Scan QR di atas & selesaikan pembayaran
+              </div>
+            </div>
+            <div class="qris-step">
+              <div class="qris-step-num">4</div>
+              <div class="qris-step-txt">
+                Klik tombol <strong>"Saya Sudah Bayar"</strong> di bawah
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="qris-footer">
+          <button class="qris-cancel-btn" onclick="cancelQrisPayment()">
+            ❌ Batalkan
+          </button>
+          <button
+            class="qris-confirm-btn"
+            id="qris-confirm-btn"
+            onclick="confirmQrisPayment()"
+          >
+            <span id="qris-confirm-content">✅ Saya Sudah Bayar</span>
+          </button>
+        </div>
+        <!-- Success State -->
+        <div class="qris-success" id="qris-success" style="display: none">
+          <div class="qris-success-icon">🎉</div>
+          <div class="qris-success-title">BOOKING DIKONFIRMASI!</div>
+          <div class="qris-success-desc" id="qris-success-desc"></div>
+          <button class="qris-done-btn" onclick="closeQrisModal()">
+            ✅ Selesai
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <span class="toast-icon">✅</span>
+      <span id="toast-msg">Berhasil!</span>
+    </div>
+    <script src="app.js"></script>
+    <script>
+      initCourts();
+    </script>
+  </body>
+</html>
