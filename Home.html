@@ -1,3 +1,145 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Booking — MoSe</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="Mose.css" />
+</head>
+
+<body>
+    <!--  AUTH OVERLAY  -->
+    <div class="auth-overlay" id="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <div class="auth-logo-icon"></div>
+                <div class="auth-logo-text">Mo<span>Se</span></div>
+            </div>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">
+                    Masuk
+                </button>
+                <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">
+                    Daftar
+                </button>
+            </div>
+            <!-- LOGIN -->
+            <div class="auth-panel active" id="panel-login">
+                <div class="auth-title">SELAMAT DATANG</div>
+                <div class="auth-subtitle">Masuk ke akun MoSe Anda</div>
+                <div class="auth-alert" id="login-alert"></div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Email</label>
+                    <input class="auth-input" id="login-email" type="email" placeholder="contoh@email.com"
+                        autocomplete="email" />
+                    <div class="auth-error" id="login-email-err">
+                        Format email tidak valid
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Password</label>
+                    <div class="auth-input-wrap">
+                        <input class="auth-input" id="login-pw" type="password" placeholder="Masukkan password"
+                            autocomplete="current-password" />
+                        <button class="toggle-pw" onclick="togglePw('login-pw', this)" tabindex="-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    </div>
+                    <div class="auth-error" id="login-pw-err">
+                        Password tidak boleh kosong
+                    </div>
+                </div>
+                <button class="auth-btn" id="login-btn" onclick="doLogin()">
+                    🔑 Masuk
+                </button>
+                <div class="auth-divider">
+                    Belum punya akun?
+                    <span onclick="switchAuthTab('register')">Daftar sekarang</span>
+                </div>
+            </div>
+            <!-- REGISTER -->
+            <div class="auth-panel" id="panel-register">
+                <div class="auth-title">BUAT AKUN</div>
+                <div class="auth-subtitle">Daftar dan mulai booking lapangan</div>
+                <div class="auth-alert" id="reg-alert"></div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Nama Lengkap</label>
+                    <input class="auth-input" id="reg-name" type="text" placeholder="Nama lengkap Anda"
+                        autocomplete="name" />
+                    <div class="auth-error" id="reg-name-err">
+                        Nama minimal 2 karakter
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Email</label>
+                    <input class="auth-input" id="reg-email" type="email" placeholder="contoh@email.com"
+                        autocomplete="email" />
+                    <div class="auth-error" id="reg-email-err">
+                        Format email tidak valid
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Nomor WhatsApp</label>
+                    <input class="auth-input" id="reg-phone" type="tel" placeholder="08123456789" autocomplete="tel" />
+                    <div class="auth-error" id="reg-phone-err">
+                        Nomor WA minimal 10 digit
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Password</label>
+                    <div class="auth-input-wrap">
+                        <input class="auth-input" id="reg-pw" type="password" placeholder="Minimal 6 karakter"
+                            autocomplete="new-password" />
+                        <button class="toggle-pw" onclick="togglePw('reg-pw', this)" tabindex="-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    </div>
+                    <div class="auth-error" id="reg-pw-err">
+                        Password minimal 6 karakter
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Konfirmasi Password</label>
+                    <div class="auth-input-wrap">
+                        <input class="auth-input" id="reg-pw2" type="password" placeholder="Ulangi password"
+                            autocomplete="new-password" />
+                        <button class="toggle-pw" onclick="togglePw('reg-pw2', this)" tabindex="-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    </div>
+                    <div class="auth-error" id="reg-pw2-err">Password tidak cocok</div>
+                </div>
+                <button class="auth-btn" id="reg-btn" onclick="doRegister()">
+                    ✨ Buat Akun
+                </button>
+                <div class="auth-divider">
+                    Sudah punya akun?
+                    <span onclick="switchAuthTab('login')">Masuk di sini</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  NAVBAR  -->
+    <nav>
+        <div class="nav-brand">
+            <div class="nav-logo-icon">
+                <img src="logo.png" alt="MoSe" class="nav-logo-img" width="40" height="40" />
+            </div>
+            <div class="nav-brand-text">Mo<span>Se</span></div>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html" id="nav-home">Home</a></li>
+            <li><a href="schedule.html" id="nav-schedule">Jadwal</a></li>
+            <li><a href="courts.html" id="nav-courts">Court</a></li>
+            <li>
+                <a href="booking.html" id="nav-booking" class="nav-cta active">Booking</a>
+            </li>
+            <li>
+                <a href="profile.html" id="nav-profile" >👤 Profil</a>
+            </li>
+        </ul>
+        <div id="nav-user-area"></div>
+        <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
 <section id="home" class="section active">
     <div class="hero">
         <div class="hero-content">
@@ -59,7 +201,7 @@
                         kamu tidak perlu khawatir konflik jadwal.</div>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🏟️</div>
+                    <div class="feature-icon">🏆</div>
                     <div class="feature-title">Fasilitas Premium</div>
                     <div class="feature-desc">4 lapangan dengan lantai kayu premium, pencahayaan LED, dan AC — siap
                         untuk latihan serius maupun santai.</div>
