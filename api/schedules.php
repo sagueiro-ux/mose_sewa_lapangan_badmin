@@ -1,12 +1,12 @@
 <?php
-// ============================================================
+
 // api/schedules.php
 // GET /api/schedules.php?court_id=1&date=2026-06-10
 //     → jadwal + status tersedia/terbooked untuk tanggal tsb
 // GET /api/schedules.php?all=1
 //     → semua jadwal (admin)
 // POST/PUT/DELETE → kelola jadwal (admin)
-// ============================================================
+
 require_once '../config/database.php';
 
 $method   = $_SERVER['REQUEST_METHOD'];
@@ -15,7 +15,7 @@ $court_id = isset($_GET['court_id']) ? (int)$_GET['court_id'] : null;
 $date     = $_GET['date'] ?? null;
 $id       = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
-// ─── GET: Ketersediaan lapangan pada tanggal tertentu ─────────
+//     GET: Ketersediaan lapangan pada tanggal tertentu 
 if ($method === 'GET' && $court_id && $date) {
     // Dapatkan nama hari dari tanggal
     $dayNames = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
@@ -58,7 +58,7 @@ if ($method === 'GET' && $court_id && $date) {
     jsonResponse(['success' => true, 'date' => $date, 'day' => $dayName, 'data' => $data]);
 }
 
-// ─── GET: Semua jadwal (admin) ────────────────────────────────
+//     GET: Semua jadwal (admin) 
 if ($method === 'GET' && isset($_GET['all'])) {
     getAuthUser();
     $sql = "
@@ -73,7 +73,7 @@ if ($method === 'GET' && isset($_GET['all'])) {
     jsonResponse(['success' => true, 'data' => $data]);
 }
 
-// ─── POST: Tambah jadwal ──────────────────────────────────────
+//     POST: Tambah jadwal 
 if ($method === 'POST') {
     getAuthUser();
     $body = json_decode(file_get_contents('php://input'), true) ?? [];
@@ -89,7 +89,7 @@ if ($method === 'POST') {
     jsonResponse(['success' => true, 'message' => 'Jadwal berhasil ditambahkan', 'schedule_id' => $conn->insert_id], 201);
 }
 
-// ─── PUT: Update jadwal ───────────────────────────────────────
+//     PUT: Update jadwal 
 if ($method === 'PUT') {
     getAuthUser();
     if (!$id) jsonResponse(['success' => false, 'message' => 'ID jadwal diperlukan'], 400);
