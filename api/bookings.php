@@ -1,12 +1,12 @@
 <?php
-// ============================================================
+
 // api/bookings.php
 // GET  /api/bookings.php          → daftar booking user login
 // GET  /api/bookings.php?id=1     → detail booking
 // GET  /api/bookings.php?all=1    → semua booking (admin)
 // POST /api/bookings.php          → buat booking baru
 // PUT  /api/bookings.php?id=1     → update status (admin)
-// ============================================================
+
 require_once '../config/database.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -14,7 +14,7 @@ $id     = isset($_GET['id']) ? (int)$_GET['id'] : null;
 $conn   = getConnection();
 $auth   = getAuthUser();
 
-// ─── GET: Detail booking ──────────────────────────────────────
+//    GET: Detail booking
 if ($method === 'GET' && $id) {
     $sql = "
         SELECT
@@ -49,7 +49,7 @@ if ($method === 'GET' && $id) {
     jsonResponse(['success' => true, 'data' => $booking]);
 }
 
-// ─── GET: Semua booking (admin) atau booking user ─────────────
+//     GET: Semua booking (admin) atau booking user
 if ($method === 'GET') {
     if (isset($_GET['all'])) {
         $sql = "
@@ -77,7 +77,7 @@ if ($method === 'GET') {
     jsonResponse(['success' => true, 'data' => $data, 'total' => count($data)]);
 }
 
-// ─── POST: Buat booking baru ──────────────────────────────────
+//      POST: Buat booking baru 
 if ($method === 'POST') {
     $body = json_decode(file_get_contents('php://input'), true) ?? [];
     /*
@@ -171,7 +171,7 @@ if ($method === 'POST') {
     }
 }
 
-// ─── PUT: Update status booking ──────────────────────────────
+//         PUT: Update status booking 
 if ($method === 'PUT') {
     if (!$id) jsonResponse(['success' => false, 'message' => 'ID booking diperlukan'], 400);
     $body   = json_decode(file_get_contents('php://input'), true) ?? [];
