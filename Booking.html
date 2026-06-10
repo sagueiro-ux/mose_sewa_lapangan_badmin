@@ -1,154 +1,460 @@
-<section id="booking" class="section">
-    <div class="booking-wrap">
-        <div class="container">
+<!doctype html>
+<html lang="id">
 
-            <!-- Auth Gate -->
-            <div class="auth-gate" id="booking-auth-gate">
-                <div class="auth-gate-icon">🔒</div>
-                <div class="auth-gate-title">LOGIN DIPERLUKAN</div>
-                <div class="auth-gate-desc">Kamu perlu masuk ke akun MoSe terlebih dahulu untuk melakukan booking
-                    lapangan.</div>
-                <button class="auth-gate-btn" onclick="openAuthOverlay()">🔑 Masuk / Daftar</button>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Booking — MoSe</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="Mose.css" />
+</head>
+
+<body>
+    <!-- AUTH OVERLAY -->
+    <div class="auth-overlay" id="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <div class="auth-logo-icon"></div>
+                <div class="auth-logo-text">Mo<span>Se</span></div>
             </div>
-
-            <!-- Booking Form -->
-            <div id="booking-content" style="display:none">
-                <div class="section-label">RESERVASI</div>
-                <h2 class="section-title">BOOKING LAPANGAN</h2>
-                <div class="booking-layout">
-
-                    <div class="booking-form-card">
-
-                        <!-- Step 1: Data Diri -->
-                        <div class="form-step">
-                            <div class="step-num">1</div>
-                            <div class="step-label">Data Diri</div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Nama Lengkap</label>
-                                <input class="form-input" id="book-name" type="text" placeholder="Budi Santoso">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Nomor WhatsApp</label>
-                                <input class="form-input" id="book-phone" type="tel" placeholder="08123456789">
-                            </div>
-                        </div>
-
-                        <!-- Step 2: Lapangan & Tanggal -->
-                        <div
-                            style="margin-top:.5rem;padding-top:1.5rem;border-top:1.5px solid var(--gray);margin-bottom:1.5rem;">
-                            <div class="form-step" style="border:none;padding:0;margin-bottom:1.5rem;">
-                                <div class="step-num">2</div>
-                                <div class="step-label">Pilih Lapangan &amp; Tanggal</div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">Lapangan</label>
-                                    <select class="form-select" id="book-court" onchange="onCourtOrDateChange()">
-                                        <option value="">— Pilih Lapangan —</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Tanggal</label>
-                                    <input class="form-input" id="book-date" type="date"
-                                        oninput="onCourtOrDateChange()">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Step 3: Pilih Jam -->
-                        <div style="padding-top:1.5rem;border-top:1.5px solid var(--gray);margin-bottom:1.5rem;">
-                            <div class="form-step" style="border:none;padding:0;margin-bottom:1.5rem;">
-                                <div class="step-num">3</div>
-                                <div class="step-label">Pilih Jam (klik untuk memilih)</div>
-                            </div>
-                            <div class="time-slot-picker" id="time-slots">
-                                <div
-                                    style="grid-column:1/-1;text-align:center;padding:1.5rem;color:var(--text-light);font-size:14px;">
-                                    Pilih lapangan dan tanggal terlebih dahulu</div>
-                            </div>
-                            <p style="font-size:12px;color:var(--text-light);margin-top:8px;">* Slot abu-abu sudah
-                                dipesan untuk tanggal ini</p>
-                        </div>
-
-                        <!-- Step 4: Pembayaran -->
-                        <div style="padding-top:1.5rem;border-top:1.5px solid var(--gray);margin-bottom:1.5rem;">
-                            <div class="form-step" style="border:none;padding:0;margin-bottom:1.5rem;">
-                                <div class="step-num">4</div>
-                                <div class="step-label">Metode Pembayaran</div>
-                            </div>
-                            <div
-                                style="background:linear-gradient(135deg,rgba(15,158,110,0.12),rgba(26,95,168,0.08));border:1.5px solid rgba(19,201,142,0.35);border-radius:14px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;">
-                                <div
-                                    style="width:48px;height:48px;background:linear-gradient(135deg,var(--teal),var(--blue-light));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">
-                                    ⬛</div>
-                                <div>
-                                    <div style="font-weight:700;font-size:15px;color:var(--navy);margin-bottom:3px;">
-                                        QRIS</div>
-                                    <div style="font-size:13px;color:var(--text-mid);">Scan QR Code · GoPay · OVO · Dana
-                                        · ShopeePay · dan semua e-wallet</div>
-                                </div>
-                                <div
-                                    style="margin-left:auto;background:rgba(19,201,142,0.15);border:1px solid rgba(19,201,142,0.4);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:700;color:var(--teal);">
-                                    CASHLESS ONLY</div>
-                            </div>
-                            <div class="form-group" style="margin-top:1rem;margin-bottom:0;">
-                                <label class="form-label">Catatan Khusus</label>
-                                <input class="form-input" id="book-note" type="text" placeholder="Opsional...">
-                            </div>
-                        </div>
-
-                        <button class="submit-btn" id="submit-btn" onclick="submitBooking()">⚡ KONFIRMASI
-                            BOOKING</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">
+                    Masuk
+                </button>
+                <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">
+                    Daftar
+                </button>
+            </div>
+            <!-- LOGIN -->
+            <div class="auth-panel active" id="panel-login">
+                <div class="auth-title">SELAMAT DATANG</div>
+                <div class="auth-subtitle">Masuk ke akun MoSe Anda</div>
+                <div class="auth-alert" id="login-alert"></div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Email</label>
+                    <input class="auth-input" id="login-email" type="email" placeholder="contoh@email.com"
+                        autocomplete="email" />
+                    <div class="auth-error" id="login-email-err">
+                        Format email tidak valid
                     </div>
-
-                    <!-- Summary Sidebar -->
-                    <div class="booking-summary">
-                        <div class="summary-title">RINGKASAN BOOKING</div>
-                        <div class="summary-row">
-                            <div class="summary-key">Nama</div>
-                            <div class="summary-val" id="sum-name">—</div>
-                        </div>
-                        <div class="summary-row">
-                            <div class="summary-key">Lapangan</div>
-                            <div class="summary-val" id="sum-court">—</div>
-                        </div>
-                        <div class="summary-row">
-                            <div class="summary-key">Tanggal</div>
-                            <div class="summary-val" id="sum-date">—</div>
-                        </div>
-                        <div class="summary-row">
-                            <div class="summary-key">Jam</div>
-                            <div class="summary-val" id="sum-time">—</div>
-                        </div>
-                        <div class="summary-row">
-                            <div class="summary-key">Durasi</div>
-                            <div class="summary-val" id="sum-dur">—</div>
-                        </div>
-                        <div class="summary-row">
-                            <div class="summary-key">Pembayaran</div>
-                            <div class="summary-val" id="sum-pay">QRIS</div>
-                        </div>
-                        <div class="summary-row summary-total">
-                            <div class="summary-key">Total</div>
-                            <div class="summary-val" id="sum-total">Rp 0</div>
-                        </div>
-
-                        <!-- Riwayat Booking User -->
-                        <div class="my-bookings-section" id="my-bookings-section">
-                            <div class="recent-title">BOOKING SAYA</div>
-                            <div id="my-bookings-list">
-                                <div style="font-size:12px;color:rgba(255,255,255,0.3);text-align:center;padding:1rem;">
-                                    Memuat riwayat...</div>
-                            </div>
-                        </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Password</label>
+                    <div class="auth-input-wrap">
+                        <input class="auth-input" id="login-pw" type="password" placeholder="Masukkan password"
+                            autocomplete="current-password" />
+                        <button class="toggle-pw" onclick="togglePw('login-pw', this)" tabindex="-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     </div>
-
+                    <div class="auth-error" id="login-pw-err">
+                        Password tidak boleh kosong
+                    </div>
+                </div>
+                <button class="auth-btn" id="login-btn" onclick="doLogin()">
+                    🔑 Masuk
+                </button>
+                <div class="auth-divider">
+                    Belum punya akun?
+                    <span onclick="switchAuthTab('register')">Daftar sekarang</span>
                 </div>
             </div>
 
+            <!-- REGISTER -->
+            <div class="auth-panel" id="panel-register">
+                <div class="auth-title">BUAT AKUN</div>
+                <div class="auth-subtitle">Daftar dan mulai booking lapangan</div>
+                <div class="auth-alert" id="reg-alert"></div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Nama Lengkap</label>
+                    <input class="auth-input" id="reg-name" type="text" placeholder="Nama lengkap Anda"
+                        autocomplete="name" />
+                    <div class="auth-error" id="reg-name-err">
+                        Nama minimal 2 karakter
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Email</label>
+                    <input class="auth-input" id="reg-email" type="email" placeholder="contoh@email.com"
+                        autocomplete="email" />
+                    <div class="auth-error" id="reg-email-err">
+                        Format email tidak valid
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Nomor WhatsApp</label>
+                    <input class="auth-input" id="reg-phone" type="tel" placeholder="08123456789" autocomplete="tel" />
+                    <div class="auth-error" id="reg-phone-err">
+                        Nomor WA minimal 10 digit
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Password</label>
+                    <div class="auth-input-wrap">
+                        <input class="auth-input" id="reg-pw" type="password" placeholder="Minimal 6 karakter"
+                            autocomplete="new-password" />
+                        <button class="toggle-pw" onclick="togglePw('reg-pw', this)" tabindex="-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    </div>
+                    <div class="auth-error" id="reg-pw-err">
+                        Password minimal 6 karakter
+                    </div>
+                </div>
+                <div class="auth-form-group">
+                    <label class="auth-label">Konfirmasi Password</label>
+                    <div class="auth-input-wrap">
+                        <input class="auth-input" id="reg-pw2" type="password" placeholder="Ulangi password"
+                            autocomplete="new-password" />
+                        <button class="toggle-pw" onclick="togglePw('reg-pw2', this)" tabindex="-1"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                    </div>
+                    <div class="auth-error" id="reg-pw2-err">Password tidak cocok</div>
+                </div>
+                <button class="auth-btn" id="reg-btn" onclick="doRegister()">
+                    ✨ Buat Akun
+                </button>
+                <div class="auth-divider">
+                    Sudah punya akun?
+                    <span onclick="switchAuthTab('login')">Masuk di sini</span>
+                </div>
+            </div>
         </div>
     </div>
-    <footer>Dibuat dengan ❤️ oleh tim <strong>MoSe</strong> · Sewa Lapangan Badminton, Semudah Itu.</footer>
-</section>
+    <!--  NAVBAR  -->
+    <nav>
+        <div class="nav-brand">
+            <div class="nav-logo-icon">
+                <img src="logo.png" alt="MoSe" style="border-radius: 50%" width="40" height="40" />
+            </div>
+            <div class="nav-brand-text">Mo<span>Se</span></div>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html" id="nav-home">Home</a></li>
+            <li><a href="schedule.html" id="nav-schedule">Jadwal</a></li>
+            <li><a href="courts.html" id="nav-courts">Court</a></li>
+            <li>
+                <a href="booking.html" id="nav-booking" class="nav-cta active">Booking</a>
+            </li>
+            <li>
+                <a href="profile.html" id="nav-profile" style="display: none">👤 Profil</a>
+            </li>
+        </ul>
+        <div id="nav-user-area"></div>
+        <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+    <section id="booking" class="section active" style="display: block; padding-top: 68px">
+        <div class="booking-wrap">
+            <div class="container">
+                <!-- Auth Gate -->
+                <div class="auth-gate" id="booking-auth-gate">
+                    <div class="auth-gate-icon">🔒</div>
+                    <div class="auth-gate-title">LOGIN DIPERLUKAN</div>
+                    <div class="auth-gate-desc">
+                        Kamu perlu masuk ke akun MoSe terlebih dahulu untuk melakukan
+                        booking lapangan.
+                    </div>
+                    <button class="auth-gate-btn" onclick="openAuthOverlay()">
+                        🔑 Masuk / Daftar
+                    </button>
+                </div>
+                <!-- Booking Form -->
+                <div id="booking-content" style="display: none">
+                    <div class="section-label">RESERVASI</div>
+                    <h2 class="section-title">BOOKING LAPANGAN</h2>
+                    <div class="booking-layout">
+                        <div class="booking-form-card">
+                            <div class="form-step">
+                                <div class="step-num">1</div>
+                                <div class="step-label">Data Diri</div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Nama Lengkap</label>
+                                    <input class="form-input" id="book-name" type="text" placeholder="Budi Santoso" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nomor WhatsApp</label>
+                                    <input class="form-input" id="book-phone" type="tel" placeholder="08123456789" />
+                                </div>
+                            </div>
+                            <div style="
+                    margin-top: 0.5rem;
+                    padding-top: 1.5rem;
+                    border-top: 1.5px solid var(--gray);
+                    margin-bottom: 1.5rem;
+                    ">
+                                <div class="form-step" style="border: none; padding: 0; margin-bottom: 1.5rem">
+                                    <div class="step-num">2</div>
+                                    <div class="step-label">Pilih Lapangan &amp; Tanggal</div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Lapangan</label>
+                                        <select class="form-select" id="book-court" onchange="onCourtOrDateChange()">
+                                            <option value="">— Pilih Lapangan —</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Tanggal</label>
+                                        <input class="form-input" id="book-date" type="date"
+                                            oninput="onCourtOrDateChange()" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="
+                    padding-top: 1.5rem;
+                    border-top: 1.5px solid var(--gray);
+                    margin-bottom: 1.5rem;
+                    ">
+                                <div class="form-step" style="border: none; padding: 0; margin-bottom: 1.5rem">
+                                    <div class="step-num">3</div>
+                                    <div class="step-label">Pilih Jam (klik untuk memilih)</div>
+                                </div>
+                                <div class="time-slot-picker" id="time-slots">
+                                    <div style="
+                        grid-column: 1/-1;
+                        text-align: center;
+                        padding: 1.5rem;
+                        color: var(--text-light);
+                        font-size: 14px;
+                        ">
+                                        Pilih lapangan dan tanggal terlebih dahulu
+                                    </div>
+                                </div>
+                                <p style="
+                        font-size: 12px;
+                        color: var(--text-light);
+                        margin-top: 8px;
+                    ">
+                                    * Slot abu-abu sudah dipesan untuk tanggal ini
+                                </p>
+                            </div>
+                            <div style="
+                    padding-top: 1.5rem;
+                    border-top: 1.5px solid var(--gray);
+                    margin-bottom: 1.5rem;
+                    ">
+                                <div class="form-step" style="border: none; padding: 0; margin-bottom: 1.5rem">
+                                    <div class="step-num">4</div>
+                                    <div class="step-label">Metode Pembayaran</div>
+                                </div>
+                                <div style="
+                        background: linear-gradient(
+                        135deg,
+                        rgba(15, 158, 110, 0.12),
+                        rgba(26, 95, 168, 0.08)
+                        );
+                        border: 1.5px solid rgba(19, 201, 142, 0.35);
+                        border-radius: 14px;
+                        padding: 1.25rem 1.5rem;
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+                    ">
+                                    <div style="
+                        width: 48px;
+                        height: 48px;
+                        background: linear-gradient(
+                            135deg,
+                            var(--teal),
+                            var(--blue-light)
+                        );
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 24px;
+                        flex-shrink: 0;
+                        ">
+                                        ⬛
+                                    </div>
+                                    <div>
+                                        <div style="
+                            font-weight: 700;
+                            font-size: 15px;
+                            color: var(--navy);
+                            margin-bottom: 3px;
+                        ">
+                                            QRIS
+                                        </div>
+                                        <div style="font-size: 13px; color: var(--text-mid)">
+                                            Scan QR Code · GoPay · OVO · Dana · ShopeePay · dan
+                                            semua e-wallet
+                                        </div>
+                                    </div>
+                                    <div style="
+                        margin-left: auto;
+                        background: rgba(19, 201, 142, 0.15);
+                        border: 1px solid rgba(19, 201, 142, 0.4);
+                        border-radius: 8px;
+                        padding: 4px 12px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        color: var(--teal);
+                        ">
+                                        CASHLESS ONLY
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top: 1rem; margin-bottom: 0">
+                                    <label class="form-label">Catatan Khusus</label>
+                                    <input class="form-input" id="book-note" type="text" placeholder="Opsional..." />
+                                </div>
+                            </div>
+                            <button class="submit-btn" id="submit-btn" onclick="submitBooking()">
+                                ⚡ KONFIRMASI BOOKING
+                            </button>
+                        </div>
+                        <!-- Summary -->
+                        <div class="booking-summary">
+                            <div class="summary-title">RINGKASAN BOOKING</div>
+                            <div class="summary-row">
+                                <div class="summary-key">Nama</div>
+                                <div class="summary-val" id="sum-name">—</div>
+                            </div>
+                            <div class="summary-row">
+                                <div class="summary-key">Lapangan</div>
+                                <div class="summary-val" id="sum-court">—</div>
+                            </div>
+                            <div class="summary-row">
+                                <div class="summary-key">Tanggal</div>
+                                <div class="summary-val" id="sum-date">—</div>
+                            </div>
+                            <div class="summary-row">
+                                <div class="summary-key">Jam</div>
+                                <div class="summary-val" id="sum-time">—</div>
+                            </div>
+                            <div class="summary-row">
+                                <div class="summary-key">Durasi</div>
+                                <div class="summary-val" id="sum-dur">—</div>
+                            </div>
+                            <div class="summary-row">
+                                <div class="summary-key">Pembayaran</div>
+                                <div class="summary-val" id="sum-pay">QRIS</div>
+                            </div>
+                            <div class="summary-row summary-total">
+                                <div class="summary-key">Total</div>
+                                <div class="summary-val" id="sum-total">Rp 0</div>
+                            </div>
+                            <div class="my-bookings-section" id="my-bookings-section">
+                                <div class="recent-title">BOOKING SAYA</div>
+                                <div id="my-bookings-list">
+                                    <div style="
+                        font-size: 12px;
+                        color: rgba(255, 255, 255, 0.3);
+                        text-align: center;
+                        padding: 1rem;
+                        ">
+                                        Memuat riwayat...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            Dibuat dengan ❤︁ oleh tim <strong>MoSe</strong> · Sewa Lapangan
+            Badminton, Semudah Itu.
+        </footer>
+    </section>
+    
+    <!--  QRIS MODAL  -->
+    <div class="qris-overlay" id="qris-overlay">
+        <div class="qris-card">
+            <div class="qris-header">
+                <div class="qris-header-left">
+                    <div class="qris-logo-icon">⬛</div>
+                    <div>
+                        <div class="qris-title">PEMBAYARAN QRIS</div>
+                        <div class="qris-subtitle" id="qris-booking-ref">
+                            Menunggu konfirmasi…
+                        </div>
+                    </div>
+                </div>
+                <div class="qris-timer-wrap">
+                    <svg class="qris-timer-ring" viewBox="0 0 44 44">
+                        <circle cx="22" cy="22" r="18" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3" />
+                        <circle id="qris-timer-circle" cx="22" cy="22" r="18" fill="none" stroke="#13c98e"
+                            stroke-width="3" stroke-dasharray="113" stroke-dashoffset="0" stroke-linecap="round"
+                            transform="rotate(-90 22 22)" style="
+                    transition:
+                    stroke-dashoffset 1s linear,
+                    stroke 0.3s;
+                " />
+                    </svg>
+                    <span class="qris-timer-text" id="qris-timer-text">05:00</span>
+                </div>
+            </div>
+            <div class="qris-body">
+                <div class="qris-amount-box">
+                    <div class="qris-amount-label">Total Pembayaran</div>
+                    <div class="qris-amount-val" id="qris-amount">Rp 0</div>
+                </div>
+                <div class="qris-qr-wrap">
+                    <div class="qris-qr-inner" id="qris-qr-inner"></div>
+                    <div class="qris-scan-hint">
+                        Scan QR di atas dengan aplikasi e-wallet Anda
+                    </div>
+                    <div class="qris-wallets">
+                        <span class="wallet-badge">GoPay</span><span class="wallet-badge">OVO</span>
+                        <span class="wallet-badge">Dana</span><span class="wallet-badge">ShopeePay</span>
+                        <span class="wallet-badge">LinkAja</span><span class="wallet-badge">+ lainnya</span>
+                    </div>
+                </div>
+                <div class="qris-steps">
+                    <div class="qris-step">
+                        <div class="qris-step-num">1</div>
+                        <div class="qris-step-txt">
+                            Buka aplikasi <strong>e-wallet</strong> Anda
+                        </div>
+                    </div>
+                    <div class="qris-step">
+                        <div class="qris-step-num">2</div>
+                        <div class="qris-step-txt">
+                            Pilih menu <strong>Scan QR / QRIS</strong>
+                        </div>
+                    </div>
+                    <div class="qris-step">
+                        <div class="qris-step-num">3</div>
+                        <div class="qris-step-txt">
+                            Scan QR di atas & selesaikan pembayaran
+                        </div>
+                    </div>
+                    <div class="qris-step">
+                        <div class="qris-step-num">4</div>
+                        <div class="qris-step-txt">
+                            Klik tombol <strong>"Saya Sudah Bayar"</strong> di bawah
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="qris-footer">
+                <button class="qris-cancel-btn" onclick="cancelQrisPayment()">
+                    ❌ Batalkan
+                </button>
+                <button class="qris-confirm-btn" id="qris-confirm-btn" onclick="confirmQrisPayment()">
+                    <span id="qris-confirm-content">✅ Saya Sudah Bayar</span>
+                </button>
+            </div>
+            <!-- Success State -->
+            <div class="qris-success" id="qris-success" style="display: none">
+                <div class="qris-success-icon">🎉</div>
+                <div class="qris-success-title">BOOKING DIKONFIRMASI!</div>
+                <div class="qris-success-desc" id="qris-success-desc"></div>
+                <button class="qris-done-btn" onclick="closeQrisModal()">
+                    ✅ Selesai
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✅</span>
+        <span id="toast-msg">Berhasil!</span>
+    </div>
+<script src="app.js"></script>
+<script>initBooking();</script>
+</body>
+
+</html>
