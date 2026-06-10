@@ -1,16 +1,16 @@
 <?php
-// ============================================================
+
 // api/payments.php
 // GET  /api/payments.php?booking_id=1 → cek status bayar
 // PUT  /api/payments.php?id=1         → verifikasi/update status pembayaran (admin)
-// ============================================================
+
 require_once '../config/database.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $conn   = getConnection();
 $auth   = getAuthUser();
 
-// ─── GET: Status pembayaran ───────────────────────────────────
+//     GET: Status pembayaran 
 if ($method === 'GET') {
     $bookingId = isset($_GET['booking_id']) ? (int)$_GET['booking_id'] : null;
     if (!$bookingId) jsonResponse(['success' => false, 'message' => 'booking_id diperlukan'], 400);
@@ -29,9 +29,9 @@ if ($method === 'GET') {
     jsonResponse(['success' => true, 'data' => $payment]);
 }
 
-// ─── PUT: Admin verifikasi/override pembayaran ────────────────
-// Catatan: Pembayaran QRIS sudah otomatis 'verified' saat booking dibuat.
-// Endpoint ini hanya digunakan admin untuk override manual jika diperlukan.
+//  PUT: Admin verifikasi/override pembayaran 
+//  Pembayaran QRIS sudah otomatis 'verified' saat booking dibuat.
+
 if ($method === 'PUT') {
     $id   = isset($_GET['id']) ? (int)$_GET['id'] : null;
     $body = json_decode(file_get_contents('php://input'), true) ?? [];
