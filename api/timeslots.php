@@ -1,10 +1,10 @@
 <?php
-// ============================================================
+
 // api/timeslots.php
 // GET  /api/timeslots.php       → semua timeslot aktif
 // POST /api/timeslots.php       → tambah timeslot (admin)
 // PUT  /api/timeslots.php?id=1  → update timeslot (admin)
-// ============================================================
+
 require_once '../config/database.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
