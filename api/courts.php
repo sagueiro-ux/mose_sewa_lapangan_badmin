@@ -1,19 +1,19 @@
 <?php
-// ============================================================
+
 // api/courts.php
 // GET    /api/courts.php           → list semua lapangan aktif
 // GET    /api/courts.php?id=1      → detail lapangan
 // POST   /api/courts.php           → tambah lapangan (admin)
 // PUT    /api/courts.php?id=1      → update lapangan (admin)
 // DELETE /api/courts.php?id=1      → hapus lapangan (admin)
-// ============================================================
+
 require_once '../config/database.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 $id     = isset($_GET['id']) ? (int)$_GET['id'] : null;
 $conn   = getConnection();
 
-// ─── GET ──────────────────────────────────────────────────────
+//     GET 
 if ($method === 'GET') {
     if ($id) {
         $stmt = $conn->prepare("SELECT * FROM courts WHERE court_id = ?");
@@ -29,7 +29,7 @@ if ($method === 'GET') {
     jsonResponse(['success' => true, 'data' => $data, 'total' => count($data)]);
 }
 
-// ─── POST ─────────────────────────────────────────────────────
+//     POST 
 if ($method === 'POST') {
     getAuthUser();
     $body = json_decode(file_get_contents('php://input'), true) ?? [];
@@ -42,7 +42,7 @@ if ($method === 'POST') {
     jsonResponse(['success' => true, 'message' => 'Lapangan berhasil ditambahkan', 'court_id' => $conn->insert_id], 201);
 }
 
-// ─── PUT ──────────────────────────────────────────────────────
+//     PUT 
 if ($method === 'PUT') {
     getAuthUser();
     if (!$id) jsonResponse(['success' => false, 'message' => 'ID lapangan diperlukan'], 400);
@@ -54,7 +54,7 @@ if ($method === 'PUT') {
     jsonResponse(['success' => true, 'message' => 'Lapangan berhasil diupdate']);
 }
 
-// ─── DELETE ───────────────────────────────────────────────────
+//     DELETE 
 if ($method === 'DELETE') {
     getAuthUser();
     if (!$id) jsonResponse(['success' => false, 'message' => 'ID lapangan diperlukan'], 400);
