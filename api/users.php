@@ -1,12 +1,12 @@
 <?php
-// ============================================================
+
 // api/users.php
 // GET  /api/users.php                  → profil user login
 // PUT  /api/users.php                  → update nama lengkap saja
 // PUT  /api/users.php?action=password  → ganti password
 // POST /api/users.php?action=avatar    → upload foto profil
-// ============================================================
-// Handle OPTIONS preflight
+
+//    Handle OPTIONS preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -32,11 +32,11 @@ $method = $_SERVER['REQUEST_METHOD'];
 $conn   = getConnection();
 $auth   = getAuthUser();
 
-// ─── GET: Profil ──────────────────────────────────────────────
+//     GET: Profil 
 if ($method === 'GET') {
     $stmt = $conn->prepare(
         "SELECT user_id, nama_lengkap, nomor_handphone, email, foto_profil
-         FROM users WHERE user_id = ?"
+        FROM users WHERE user_id = ?"
     );
     $stmt->bind_param('i', $auth['user_id']);
     $stmt->execute();
@@ -45,7 +45,7 @@ if ($method === 'GET') {
     jsonResponse(['success' => true, 'data' => $user]);
 }
 
-// ─── POST: Upload Foto Profil ─────────────────────────────────
+//     POST: Upload Foto Profil 
 if ($method === 'POST') {
     $action = $_GET['action'] ?? '';
 
@@ -105,12 +105,39 @@ if ($method === 'POST') {
     jsonResponse(['success' => false, 'message' => 'Action tidak dikenal'], 400);
 }
 
-// ─── PUT: Update profil / ganti password ──────────────────────
+//     DELETE: Hapus Foto Profil 
+if ($method === 'DELETE') {
+    $action = $_GET['action'] ?? '';
+
+    if ($action === 'delete_avatar') {
+        $stmt = $conn->prepare("SELECT foto_profil FROM users WHERE user_id = ?");
+        $stmt->bind_param('i', $auth['user_id']);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+
+        if (empty($row['foto_profil'])) {
+            jsonResponse(['success' => false, 'message' => 'Tidak ada foto profil untuk dihapus'], 400);
+        }
+
+        $oldPath = __DIR__ . '/../' . $row['foto_profil'];
+        if (file_exists($oldPath)) @unlink($oldPath);
+
+        $stmt2 = $conn->prepare("UPDATE users SET foto_profil = NULL WHERE user_id = ?");
+        $stmt2->bind_param('i', $auth['user_id']);
+        $stmt2->execute();
+
+        jsonResponse(['success' => true, 'message' => 'Foto profil berhasil dihapus']);
+    }
+
+    jsonResponse(['success' => false, 'message' => 'Action tidak dikenal'], 400);
+}
+
+//     PUT: Update profil / ganti password 
 if ($method === 'PUT') {
     $body   = json_decode(file_get_contents('php://input'), true) ?? [];
     $action = $_GET['action'] ?? 'profile';
 
-    // ── Ganti Password ────────────────────────────────────────
+    //     Ganti Password 
     if ($action === 'password') {
         if (empty($body['old_password']) || empty($body['new_password'])) {
             jsonResponse(['success' => false, 'message' => 'old_password dan new_password wajib diisi'], 400);
@@ -135,7 +162,7 @@ if ($method === 'PUT') {
         jsonResponse(['success' => true, 'message' => 'Password berhasil diubah']);
     }
 
-    // ── Update Profil (hanya nama_lengkap) ────────────────────
+    //     Update Profil (hanya nama_lengkap) 
     // Nomor handphone dan email TIDAK bisa diubah oleh user
     if (empty($body['nama_lengkap']) || strlen(trim($body['nama_lengkap'])) < 2) {
         jsonResponse(['success' => false, 'message' => 'Nama lengkap minimal 2 karakter'], 400);
